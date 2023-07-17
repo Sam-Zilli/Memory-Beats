@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 public class MainActivity extends AppCompatActivity {
 
     static {
-        System.loadLibrary("cs5520finalproject");
+        System.loadLibrary("native-lib");
     }
 
     private native void touchEvent(int action);
