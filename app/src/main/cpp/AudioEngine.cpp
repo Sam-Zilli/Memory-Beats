@@ -87,3 +87,7 @@ void AudioEngine::stop() {
 void AudioEngine::setToneOn(bool isToneOn) {
     oscillator_.setWaveOn(isToneOn);
 }
+
+void AudioEngine::setFrequency(float frequency) {
+    oscillator_.setFrequency(frequency);
+}

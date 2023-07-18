@@ -17,6 +17,9 @@ public:
     void restart();
     void setToneOn(bool isToneOn);
 
+    // new method to set frequency
+    void setFrequency(float frequency);
+
 private:
     Oscillator oscillator_;
     AAudioStream *stream_;
