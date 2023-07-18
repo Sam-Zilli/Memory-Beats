@@ -7,14 +7,17 @@
 
 #define TWO_PI (3.14159 * 2)
 #define AMPLITUDE 0.3
-#define FREQUENCY 440.0
+
 
 // numFrames is the number of audio frames which we must render
 // phase_ stores the current wave phase, and it is incremented by phaseIncrement_ after each sample is generated
 // if isWaveOn_is false -> just output zeroes (silence)
 
 void Oscillator::setSampleRate(int32_t sampleRate) {
-    phaseIncrement_ = (TWO_PI * FREQUENCY) / (double) sampleRate;
+    sampleRate_ = sampleRate;
+
+    // phase increment is also dependent on sample rate
+    calcPhaseIncrement();
 }
 
 void Oscillator::setWaveOn(bool isWaveOn) {
@@ -37,4 +40,17 @@ void Oscillator::render(float *audioData, int32_t numFrames) {
             audioData[i] = 0;
         }
     }
+}
+
+void Oscillator::setFrequency(float frequency) {
+    frequency_ = frequency;
+
+    // after updating frequency to input, we update phase increment accordingly since
+    // phase increment is dependent on both the frequency and sample rate
+    calcPhaseIncrement();
+}
+
+
+void Oscillator::calcPhaseIncrement() {
+    phaseIncrement_ = (TWO_PI * frequency_) / (double) sampleRate_;
 }
