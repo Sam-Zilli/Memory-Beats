@@ -8,7 +8,7 @@ static AudioEngine *audioEngine = new AudioEngine();
 extern "C" {
 
 JNIEXPORT void JNICALL
-Java_edu_northeastern_cs5520finalproject_MainActivity_touchEvent(JNIEnv *env, jobject obj, jint action) {
+Java_edu_northeastern_cs5520finalproject_GameplayActivity_touchEvent(JNIEnv *env, jobject obj, jint action) {
     switch (action) {
         case AMOTION_EVENT_ACTION_DOWN:
             audioEngine->setToneOn(true);
@@ -25,12 +25,12 @@ Java_edu_northeastern_cs5520finalproject_MainActivity_touchEvent(JNIEnv *env, jo
 }
 
 JNIEXPORT void JNICALL
-Java_edu_northeastern_cs5520finalproject_MainActivity_startEngine(JNIEnv *env, jobject /* this */) {
+Java_edu_northeastern_cs5520finalproject_GameplayActivity_startEngine(JNIEnv *env, jobject /* this */) {
     audioEngine->start();
 }
 
 JNIEXPORT void JNICALL
-Java_edu_northeastern_cs5520finalproject_MainActivity_stopEngine(JNIEnv *env, jobject /* this */) {
+Java_edu_northeastern_cs5520finalproject_GameplayActivity_stopEngine(JNIEnv *env, jobject /* this */) {
     audioEngine->stop();
 }
 }
