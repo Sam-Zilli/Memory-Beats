@@ -12,6 +12,9 @@ Java_edu_northeastern_cs5520finalproject_MainActivity_touchEvent(JNIEnv *env, jo
     switch (action) {
         case AMOTION_EVENT_ACTION_DOWN:
             audioEngine->setToneOn(true);
+            //audioEngine->setFrequency(261.63f);
+            audioEngine->setFrequencies(261.63f, 329.63f);
+            //audioEngine->setFrequencies(293.665f, 329.00f);
             break;
         case AMOTION_EVENT_ACTION_UP:
             audioEngine->setToneOn(false);
