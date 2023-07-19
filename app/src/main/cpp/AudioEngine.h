@@ -18,7 +18,9 @@ public:
     void setToneOn(bool isToneOn);
 
     // new method to set frequency
-    void setFrequency(float frequency);
+    //void setFrequency(float frequency);
+
+    void setFrequencies(float frequency1, float frequency2);
 
 private:
     Oscillator oscillator_;
