@@ -15,22 +15,8 @@ import java.util.List;
 
 public class GameplayActivity extends AppCompatActivity {
 
-    ImageButton button1;
-    ImageButton button2;
-    ImageButton button3;
-    ImageButton button4;
-    ImageButton button5;
-    ImageButton button6;
-    ImageButton button7;
-    ImageButton button8;
-    ImageButton button9;
-    ImageButton button10;
-    ImageButton button11;
-    ImageButton button12;
-    ImageButton button13;
-    ImageButton button14;
-    ImageButton button15;
-    ImageButton button16;
+    ImageButton button1, button2, button3, button4, button5, button6, button7, button8,
+    button9, button10, button11, button12, button13, button14, button15, button16;
 
     static {
         System.loadLibrary("native-lib");
