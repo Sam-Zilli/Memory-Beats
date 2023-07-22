@@ -38,12 +38,12 @@
         android:contentDescription="3"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        app:srcCompat="?android:attr/galleryItemBackground"
         app:layout_constraintBottom_toTopOf="@+id/button7"
         app:layout_constraintEnd_toStartOf="@+id/button4"
         app:layout_constraintStart_toEndOf="@+id/button2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="?android:attr/galleryItemBackground"/>
 
     <ImageButton
         android:id="@+id/button4"
