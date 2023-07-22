@@ -87,7 +87,7 @@ public class GameplayActivity extends AppCompatActivity {
                 button4, button5, button6, button7, button8, button9, button10, button11,
                 button12, button13, button14, button15, button16));
 
-
+        // Adding on click listeners for each button. Currently will log it's button number.
         for (int i = 0; i < buttonList.size(); i++) {
             final int finalI = i;
             buttonList.get(i).setOnClickListener(new View.OnClickListener() {
