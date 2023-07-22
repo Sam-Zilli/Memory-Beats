@@ -40,6 +40,7 @@ public class GameplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gameplay);
         startEngine();
 
+        // creates buttons and on click listeners
         setupButtons();
     }
 
