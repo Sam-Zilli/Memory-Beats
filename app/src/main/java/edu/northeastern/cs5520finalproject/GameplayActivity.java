@@ -28,6 +28,12 @@ public class GameplayActivity extends AppCompatActivity {
 
     private native void stopEngine();
 
+    //293.665f, 329.00f
+
+    // 261.63f; 329.63f;
+    private float frequency1 = 220.00f;
+    private float frequency2 =  293.66f;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,3 +96,13 @@ public class GameplayActivity extends AppCompatActivity {
         }
     }
 }
+
+//    public float getFrequency1(){
+//        return frequency1;
+//    }
+
+//    public float getFrequency2(){
+//        return frequency2;
+//    }
+}
+
