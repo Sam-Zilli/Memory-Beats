@@ -104,5 +104,5 @@ public class GameplayActivity extends AppCompatActivity {
 //    public float getFrequency2(){
 //        return frequency2;
 //    }
-}
+
 
