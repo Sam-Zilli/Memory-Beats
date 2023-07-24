@@ -17,23 +17,28 @@ public class MusicIntervals {
 
         Dictionary intervalsFromA4 = new Hashtable();
         createIntervalsDictionaryFromA4(intervalsFromA4);
-    }
 
+
+    }
     public int findInterval(double frequency1, double frequency2) {
         int number_of_semi_tones = 0;
 
-       if(frequency1 == frequency2) {
+        // checking for same note
+        if(frequency1 == frequency2) {
            return number_of_semi_tones;
        }
+
        if(frequency1 < frequency2) {
-            while(frequency1 != frequency2 || frequency1 < frequency2) {
-                frequency1 *= EQUAL_TEMP_RATIO;
+            while(frequency1 <= frequency2) {
+                if(frequency1 == frequency2) {
+                    // caught up to 2nd note
+                    return number_of_semi_tones;
+                }
+                frequency1 = frequency1*EQUAL_TEMP_RATIO;
                 number_of_semi_tones += 1;
             }
        }
-       else {
 
-       }
        return number_of_semi_tones;
     }
 
@@ -41,6 +46,16 @@ public class MusicIntervals {
         intervalsFromA4.put("Unison", "A4");
         intervalsFromA4.put("Minor2nd", "Bb4");
         intervalsFromA4.put("Major2nd", "B4");
+        intervalsFromA4.put("Minor3rd", "C5");
+        intervalsFromA4.put("Major3rd", "C#5");
+        intervalsFromA4.put("Perfect4th", "D5");
+        intervalsFromA4.put("Tritone", "D#5");
+        intervalsFromA4.put("Perfect5th", "E5");
+        intervalsFromA4.put("Minor6th", "F5");
+        intervalsFromA4.put("Major6th", "F#5");
+        intervalsFromA4.put("Minor7th", "G5");
+        intervalsFromA4.put("Major7th", "G#5");
+        intervalsFromA4.put("Octave", "A5");
 
 
 
@@ -92,11 +107,4 @@ public class MusicIntervals {
 //        frequencies.put("A5", 880.00);
         return frequencies;
     }
-
-    private String getInterval(float interval1, float interval2) {
-        return "hi";
-    }
-
-
-
 }
