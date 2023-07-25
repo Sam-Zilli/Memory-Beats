@@ -288,6 +288,7 @@ public class GameplayActivity extends AppCompatActivity {
     }
 
     // https://developer.android.com/reference/android/os/CountDownTimer
+    // referred to following link for tutorial: https://www.youtube.com/watch?v=zmjfAcnosS0
     private void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
@@ -313,8 +314,8 @@ public class GameplayActivity extends AppCompatActivity {
                     builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-//                            progressBar.setProgress(0);
-//                            mCountDownTimer.cancel();
+//
+//
                             timerRunning = false;
                             recreate();
                         }
@@ -337,6 +338,37 @@ public class GameplayActivity extends AppCompatActivity {
         } else {
             textViewCountDown.setTextColor(Color.RED);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(timerRunning) {
+            timerRunning = false;
+            countDownTimer.cancel();
+           displayConfirmationMessage();
+        }
+        //super.onBackPressed();
+    }
+
+    public void displayConfirmationMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameplayActivity.this);
+        builder.setMessage("You are currently in a game session. You will lose all progress if you quit.  Are you sure you want to quit?")
+                .setTitle("Quit confirmation");
+        builder.setCancelable(false)
+                .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("Resume game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                timerRunning = true;
+                startTimer();
+            }
+        });
+        builder.show();
     }
 }
 
