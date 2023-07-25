@@ -3,20 +3,22 @@ package edu.northeastern.cs5520finalproject;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class GameplayActivity extends AppCompatActivity {
 
@@ -46,6 +48,12 @@ public class GameplayActivity extends AppCompatActivity {
     private float frequency1;
     private float frequency2;
 
+    private static final long START_TIME_IN_MILLIS = 240000;
+    private TextView textViewCountDown;
+    private CountDownTimer countDownTimer;
+    private boolean timerRunning;
+    private long timeLeftInMillis = START_TIME_IN_MILLIS;
+
     ProgressBar progressBar;
     ArrayList<FrequencyPairModel> frequencyList = new ArrayList<>();
 
@@ -68,7 +76,10 @@ public class GameplayActivity extends AppCompatActivity {
         initializeFrequencyList();
         Collections.shuffle(frequencyList);
         progressBar = findViewById(R.id.progressBar);
+        progressBar.setProgress(0);
         progressBar.setMax(80);
+        textViewCountDown = findViewById(R.id.text_countdown);
+        startTimer();
     }
 
     private void initializeFrequencyList() {
@@ -90,11 +101,11 @@ public class GameplayActivity extends AppCompatActivity {
         frequencyList.add(pair8);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        touchEvent(event.getAction());
-        return super.onTouchEvent(event);
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        touchEvent(event.getAction());
+//        return super.onTouchEvent(event);
+//    }
 
     @Override
     public void onDestroy() {
@@ -252,7 +263,80 @@ public class GameplayActivity extends AppCompatActivity {
         }
         progressBar.setProgress(newProgress);
 
+        if(progressBar.getProgress() == progressBar.getMax()) {
+            countDownTimer.cancel();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Congratulations! You have matched all pairs!")
+                    .setTitle("You Win!");
+            builder.setCancelable(false)
+                    .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    progressBar.setProgress(0);
+                    recreate();
+                }
+            });
+            builder.show();
+        }
 
+    }
+
+    // https://developer.android.com/reference/android/os/CountDownTimer
+    private void startTimer() {
+        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeftInMillis = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                timerRunning = false;
+                if(!gameOver) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GameplayActivity.this);
+                    builder.setMessage("Time ran out. Better luck next time!")
+                            .setTitle("You Lose");
+                    builder.setCancelable(false)
+                            .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            });
+                    builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                            progressBar.setProgress(0);
+//                            mCountDownTimer.cancel();
+                            timerRunning = false;
+                            recreate();
+                        }
+                    });
+                    builder.show();
+                }
+            }
+        }.start();
+        timerRunning = true;
+    }
+
+    private void updateCountDownText() {
+        int minutes = (int) timeLeftInMillis / 1000 / 60;
+        int seconds = (int) timeLeftInMillis / 1000 % 60;
+        String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
+        textViewCountDown.setText(timeLeftFormatted);
+
+        if(minutes > 2) {
+            textViewCountDown.setTextColor(Color.GREEN);
+        } else {
+            textViewCountDown.setTextColor(Color.RED);
+        }
     }
 }
 
