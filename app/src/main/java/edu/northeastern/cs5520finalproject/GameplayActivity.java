@@ -48,11 +48,17 @@ public class GameplayActivity extends AppCompatActivity {
     private float frequency1;
     private float frequency2;
 
+    private int moveCounter = 0;
+
+    private TextView moveText;
+
     private static final long START_TIME_IN_MILLIS = 240000;
     private TextView textViewCountDown;
     private CountDownTimer countDownTimer;
     private boolean timerRunning;
     private long timeLeftInMillis = START_TIME_IN_MILLIS;
+
+    ImageButton exitButton;
 
     ProgressBar progressBar;
     ArrayList<FrequencyPairModel> frequencyList = new ArrayList<>();
@@ -80,6 +86,21 @@ public class GameplayActivity extends AppCompatActivity {
         progressBar.setMax(80);
         textViewCountDown = findViewById(R.id.text_countdown);
         startTimer();
+
+        exitButton = findViewById(R.id.exitButton);
+        // need to fix background
+        exitButton.setImageResource(R.drawable.baseline_exit_to_app_24);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(timerRunning) {
+                    timerRunning = false;
+                    countDownTimer.cancel();
+                    displayConfirmationMessage();
+                }
+            }
+        });
+        moveText = findViewById(R.id.moveCounter);
     }
 
     private void initializeFrequencyList() {
@@ -184,6 +205,9 @@ public class GameplayActivity extends AppCompatActivity {
                         if(!checkMatch()) {
                             // set flag to true
                             resetButton = true;
+                            moveCounter++;
+                            String current = "Move: " + moveCounter;
+                            moveText.setText(current);
 //                            previousClick = null;
 //                            currentClick = null;
                         }
@@ -242,6 +266,9 @@ public class GameplayActivity extends AppCompatActivity {
             frequency1 = 0;
             frequency2 = 0;
             incrementProgress(10);
+            moveCounter++;
+            String current = "Move: " + moveCounter;
+            moveText.setText(current);
             return true;
         }
 //        else {
