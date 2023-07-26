@@ -62,6 +62,9 @@ public class GameplayActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
     ArrayList<FrequencyPairModel> frequencyList = new ArrayList<>();
+    //*************************************************************
+    ArrayList<Float> frequencyAList = new ArrayList<>(Arrays.asList(261.63f, 293.66f, 329.63f, 349.23f, 392.00f, 440.00f, 493.88f, 523.25f));
+    ArrayList<Float> frequencyBList = new ArrayList<>(Arrays.asList(329.63f, 349.23f, 392.00f, 415.30f, 466.16f, 523.25f, 587.33f, 689.25f));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +73,24 @@ public class GameplayActivity extends AppCompatActivity {
         startEngine();
 
         setupButtons();
+        Collections.shuffle(frequencyAList);
+        Collections.shuffle(frequencyBList);
 
-        pair1 = new FrequencyPairModel(261.63f, 329.63f);
-        pair2 = new FrequencyPairModel(293.66f, 349.23f);
-        pair3 = new FrequencyPairModel(329.63f, 392.00f);
-        pair4 = new FrequencyPairModel(349.23f, 415.30f);
-        pair5 = new FrequencyPairModel(392.00f, 466.16f);
-        pair6 = new FrequencyPairModel(440.00f, 523.25f);
-        pair7 = new FrequencyPairModel(493.88f, 587.33f);
-        pair8 = new FrequencyPairModel(523.25f, 689.25f);
-        initializeFrequencyList();
+        for(int i = 0; i < frequencyAList.size(); i++) {
+            FrequencyPairModel newPair = new FrequencyPairModel(frequencyAList.get(i), frequencyBList.get(i));
+            frequencyList.add(newPair);
+            frequencyList.add(newPair);
+        }
+
+//        pair1 = new FrequencyPairModel(261.63f, 329.63f);
+//        pair2 = new FrequencyPairModel(293.66f, 349.23f);
+//        pair3 = new FrequencyPairModel(329.63f, 392.00f);
+//        pair4 = new FrequencyPairModel(349.23f, 415.30f);
+//        pair5 = new FrequencyPairModel(392.00f, 466.16f);
+//        pair6 = new FrequencyPairModel(440.00f, 523.25f);
+//        pair7 = new FrequencyPairModel(493.88f, 587.33f);
+//        pair8 = new FrequencyPairModel(523.25f, 689.25f);
+//        initializeFrequencyList();
         Collections.shuffle(frequencyList);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setProgress(0);
