@@ -45,9 +45,6 @@ public class GameplayActivity extends AppCompatActivity {
 
     private native void stopEngine();
 
-    //293.665f, 329.00f
-
-    // 261.63f; 329.63f;
     private float frequency1;
     private float frequency2;
 
@@ -77,16 +74,22 @@ public class GameplayActivity extends AppCompatActivity {
 
         // https://developer.android.com/reference/android/graphics/drawable/AnimationDrawable
         // link for animated background tutorial: https://www.youtube.com/watch?v=4lEnLTqsnaw
+        // Set AnimationDrawable to Constraint Layout's background
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
         animationDrawable.setEnterFadeDuration(2500);
         animationDrawable.setExitFadeDuration(5000);
         animationDrawable.start();
+
         startEngine();
 
         setupButtons();
+
+        // frequencyA and frequencyB contain 8 frequencies each.  Want to randomize the order each game
         Collections.shuffle(frequencyAList);
         Collections.shuffle(frequencyBList);
 
+        // generating frequency pairs using the indices from frequencyAList and frequencyBList
+        // adding this frequency pairs to a frequency list.  Each index will correspond to a specific button
         for(int i = 0; i < frequencyAList.size(); i++) {
             FrequencyPairModel newPair = new FrequencyPairModel(frequencyAList.get(i), frequencyBList.get(i));
             frequencyList.add(newPair);
@@ -102,13 +105,20 @@ public class GameplayActivity extends AppCompatActivity {
 //        pair7 = new FrequencyPairModel(493.88f, 587.33f);
 //        pair8 = new FrequencyPairModel(523.25f, 689.25f);
 //        initializeFrequencyList();
+
+        // shuffling the final frequencyList so that the order will be randomized
         Collections.shuffle(frequencyList);
+
+        // Setting up progress bar.  Max set to 80 since there are 8 unique pairs
         progressBar = findViewById(R.id.progressBar);
         progressBar.setProgress(0);
         progressBar.setMax(80);
+
+        // Setting up countdown timer
         textViewCountDown = findViewById(R.id.text_countdown);
         startTimer();
 
+        // Setting up exit button and onClickListener
         exitButton = findViewById(R.id.exitButton);
         // need to fix background
         exitButton.setImageResource(R.drawable.baseline_exit_to_app_24);
@@ -122,6 +132,8 @@ public class GameplayActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Setting up textview to display move counter
         moveText = findViewById(R.id.moveCounter);
     }
 
@@ -143,12 +155,6 @@ public class GameplayActivity extends AppCompatActivity {
         frequencyList.add(pair8);
         frequencyList.add(pair8);
     }
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        touchEvent(event.getAction());
-//        return super.onTouchEvent(event);
-//    }
 
     @Override
     public void onDestroy() {
@@ -180,34 +186,25 @@ public class GameplayActivity extends AppCompatActivity {
                 button4, button5, button6, button7, button8, button9, button10, button11,
                 button12, button13, button14, button15, button16));
 
-        // Adding on click listeners for each button. Currently will log it's button number.
-//        for (int i = 0; i < buttonList.size(); i++) {
-//            final int finalI = i;
-//            buttonList.get(i).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (finalI == 0) {
-//                        Log.i("GameplayActivity", String.valueOf(finalI + 1));
-//                    }
-//                    else {
-//                        Log.i("GameplayActivity", String.valueOf(finalI + 1));
-//                    }
-//                }
-//            });
-//        }
+        // Setting up default image for each button (card flipped down)
         for (int i = 0; i < buttonList.size(); i++) {
             buttonList.get(i).setImageResource(R.drawable.tile_clicked_foreground);
         }
 
+        // Setting up onClickListener for each button. Memory game logic located here
         for (int i = 0; i < buttonList.size(); i++) {
             final int finalI = i;
             buttonList.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.i("TAG", "button clicked");
+                    // This will trigger only if two notes have been clicked but their frequencies don't match
                     if(resetButton) {
+                        // flip card down to default image
                         previousClick.getButtonNumber().setImageResource(R.drawable.tile_clicked_foreground);
                         currentClick.getButtonNumber().setImageResource(R.drawable.tile_clicked_foreground);
+
+                        // reset both previousClick and currentClick to null and resetButton to false
                         previousClick = null;
                         currentClick = null;
                         resetButton = false;
@@ -215,50 +212,35 @@ public class GameplayActivity extends AppCompatActivity {
                     }
                     if(previousClick == null) {
                         previousClick = new CardClickedModel(buttonList.get(finalI), frequencyList.get(finalI).getFrequencyA(), frequencyList.get(finalI).getFrequencyB());
+                        // flip card up
                         buttonList.get(finalI).setImageResource(R.drawable.app_icon_foreground);
                     } else if (currentClick == null) {
+                        // ensures that a button can't match itself
                         if(buttonList.get(finalI) == previousClick.getButtonNumber()) {
                             return;
                         }
                         currentClick = new CardClickedModel(buttonList.get(finalI), frequencyList.get(finalI).getFrequencyA(), frequencyList.get(finalI).getFrequencyB());
+                        // flip card up
                         buttonList.get(finalI).setImageResource(R.drawable.app_icon_foreground);
                     }
                     if (previousClick != null && currentClick != null) {
+                        // check if the two buttons have the same frequencies
                         if(!checkMatch()) {
-                            // set flag to true
+                            // set flag to true if buttons do not match
                             resetButton = true;
+
+                            // increase move counter and display updated count
                             moveCounter++;
                             String current = "Move: " + moveCounter;
                             moveText.setText(current);
-//                            previousClick = null;
-//                            currentClick = null;
                         }
                     }
-//                    if(gameOver) {
-//
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(null);
-//                        builder.setMessage("Congratulations! You have matched all pairs!")
-//                                .setTitle("You Win!");
-//                        builder.setCancelable(false)
-//                                .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        finish();
-//                                    }
-//                                });
-//                        builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                recreate();
-//                            }
-//                        });
-//
-//                    }
-                    //buttonList.get(finalI).setImageResource(R.drawable.app_icon_foreground);
                 }
             });
         }
 
+        // Setting up onTouchListener for each button
+        // OnTouchListener is responsible for producing the frequencies
         for (int i = 0; i < buttonList.size(); i++) {
             final int finalI = i;
             buttonList.get(i).setOnTouchListener(new View.OnTouchListener() {
@@ -266,6 +248,7 @@ public class GameplayActivity extends AppCompatActivity {
                 public boolean onTouch(View v, MotionEvent event) {
                     frequency1 = frequencyList.get(finalI).getFrequencyA();
                     frequency2 = frequencyList.get(finalI).getFrequencyB();
+                    // this line is required to generate sound
                     touchEvent(event.getAction());
                     return onTouchEvent(event);
                 }
@@ -273,45 +256,55 @@ public class GameplayActivity extends AppCompatActivity {
             });
         }
     }
-    // change from boolean to void
+
+    // Method to check if two frequency pairs match
     private boolean checkMatch() {
         if(previousClick.getFrequencyA() == currentClick.getFrequencyA() && previousClick.getFrequencyB() == currentClick.getFrequencyB()) {
+            // If buttons match, make both buttons invisible
             previousClick.getButtonNumber().setVisibility(View.INVISIBLE);
             currentClick.getButtonNumber().setVisibility(View.INVISIBLE);
+
+            // Deactivate onClickListener and onTouchListener for both buttons
             previousClick.getButtonNumber().setOnClickListener(null);
             previousClick.getButtonNumber().setOnTouchListener(null);
             currentClick.getButtonNumber().setOnClickListener(null);
             currentClick.getButtonNumber().setOnTouchListener(null);
 
+            // Reset previousClick and currentClick
             previousClick = null;
             currentClick = null;
+
+            // set both frequencies to 0
             frequency1 = 0;
             frequency2 = 0;
+
+            // increment progress bar accordingly and update move counter
             incrementProgress(10);
             moveCounter++;
             String current = "Move: " + moveCounter;
             moveText.setText(current);
             return true;
         }
-//        else {
-//            previousClick.getButtonNumber().setImageResource(R.drawable.tile_clicked_foreground);
-//            currentClick.getButtonNumber().setImageResource(R.drawable.tile_clicked_foreground);
-//        }
         return false;
     }
 
+    // Method to increment progress bar
     private void incrementProgress(int incrementValue) {
         int currentProgress = progressBar.getProgress();
         int newProgress = currentProgress + incrementValue;
+
+        // if progress bar is completely filled, this means that game is over
         if(newProgress == progressBar.getMax()) {
             gameOver = true;
         }
 
+        // display updated progress in progress bar
         if(newProgress > progressBar.getMax()) {
             newProgress = progressBar.getMax();
         }
         progressBar.setProgress(newProgress);
 
+        // if progress bar is full, game is over.  Now display You Win alert dialog
         if(progressBar.getProgress() == progressBar.getMax()) {
             countDownTimer.cancel();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -321,12 +314,14 @@ public class GameplayActivity extends AppCompatActivity {
                     .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // close activity and return to main menu
                             finish();
                         }
                     });
             builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    // start a new activity (new game)
                     progressBar.setProgress(0);
                     recreate();
                 }
@@ -350,6 +345,7 @@ public class GameplayActivity extends AppCompatActivity {
             public void onFinish() {
                 timerRunning = false;
                 if(!gameOver) {
+                    // Timer ran out, player loses, display alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameplayActivity.this);
                     builder.setMessage("Time ran out. Better luck next time!")
                             .setTitle("You Lose");
@@ -363,9 +359,8 @@ public class GameplayActivity extends AppCompatActivity {
                     builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-//
-//
-                            timerRunning = false;
+                            // might be redundant
+                            //timerRunning = false;
                             recreate();
                         }
                     });
@@ -376,12 +371,14 @@ public class GameplayActivity extends AppCompatActivity {
         timerRunning = true;
     }
 
+    // Method to update countdown timer
     private void updateCountDownText() {
         int minutes = (int) timeLeftInMillis / 1000 / 60;
         int seconds = (int) timeLeftInMillis / 1000 % 60;
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         textViewCountDown.setText(timeLeftFormatted);
 
+        // If countdown timer reaches below 3 minutes, text color changes to red
         if(minutes > 2) {
             textViewCountDown.setTextColor(Color.GREEN);
         } else {
@@ -389,6 +386,7 @@ public class GameplayActivity extends AppCompatActivity {
         }
     }
 
+    // Confirm if user wants to quit if game is currently running
     @Override
     public void onBackPressed() {
         if(timerRunning) {
@@ -421,12 +419,5 @@ public class GameplayActivity extends AppCompatActivity {
     }
 }
 
-//    public float getFrequency1(){
-//        return frequency1;
-//    }
-
-//    public float getFrequency2(){
-//        return frequency2;
-//    }
 
 
