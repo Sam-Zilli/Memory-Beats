@@ -1,5 +1,6 @@
 package edu.northeastern.cs5520finalproject;
 
+// No longer need
 public class ButtonFrequencyModel {
     private Integer buttonNumber;
     private float frequencyA;

@@ -2,9 +2,12 @@ package edu.northeastern.cs5520finalproject;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -70,6 +73,14 @@ public class GameplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
+        ConstraintLayout constraintLayout = findViewById(R.id.gameLayout);
+
+        // https://developer.android.com/reference/android/graphics/drawable/AnimationDrawable
+        // link for animated background tutorial: https://www.youtube.com/watch?v=4lEnLTqsnaw
+        AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2500);
+        animationDrawable.setExitFadeDuration(5000);
+        animationDrawable.start();
         startEngine();
 
         setupButtons();
