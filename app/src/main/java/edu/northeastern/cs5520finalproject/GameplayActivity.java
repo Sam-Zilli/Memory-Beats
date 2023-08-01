@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -75,6 +76,9 @@ public class GameplayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
+
+        // locking the screen orientation to remain consistent with our main menu screen
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ConstraintLayout constraintLayout = findViewById(R.id.gameLayout);
 
         // https://developer.android.com/reference/android/graphics/drawable/AnimationDrawable
@@ -124,6 +128,14 @@ public class GameplayActivity extends AppCompatActivity {
 
         //************** adjusting countdown timer according to level
         level = getIntent().getIntExtra("levelKey", 1);
+
+        // initialize Move counter according to moves left
+        setMoveCounterLevel();
+        // Setting up textview to display move counter
+        moveText = findViewById(R.id.moveCounter);
+        String s = "Moves left: " + moveCounter;
+        moveText.setText(s);
+
         if (level > 1) {
             timeLeftInMillis = START_TIME_IN_MILLIS - (20000L * (level - 1));
         }
@@ -146,7 +158,19 @@ public class GameplayActivity extends AppCompatActivity {
         });
 
         // Setting up textview to display move counter
-        moveText = findViewById(R.id.moveCounter);
+//        moveText = findViewById(R.id.moveCounter);
+    }
+
+    private void setMoveCounterLevel() {
+        if(level == 1) {
+            moveCounter = 30;
+        } else if (level == 2 || level == 3) {
+            moveCounter = 25;
+        } else if (level == 4 || level == 5) {
+            moveCounter = 20;
+        } else {
+            moveCounter = 15;
+        }
     }
 
     private void initializeFrequencyList() {
@@ -242,10 +266,21 @@ public class GameplayActivity extends AppCompatActivity {
                             resetButton = true;
 
                             // increase move counter and display updated count
-                            moveCounter++;
-                            String current = "Move: " + moveCounter;
+//                            moveCounter++;
+//                            String current = "Move: " + moveCounter;
+
+                            // *****************
+                            moveCounter--;
+                            String current = "Moves Left: " + moveCounter;
                             moveText.setText(current);
                         }
+                    }
+                    // ********************** check if exceed max moves allowed
+                    if(moveCounter == 0) {
+                        gameOver = true;
+                        timerRunning = false;
+                        countDownTimer.cancel();
+                        displayNoMovesLeftMessage();
                     }
                 }
             });
@@ -268,6 +303,29 @@ public class GameplayActivity extends AppCompatActivity {
             });
         }
     }
+
+    private void displayNoMovesLeftMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameplayActivity.this);
+        builder.setMessage("You ran out of moves!  Better luck next time!")
+                .setTitle("No Moves Left");
+        builder.setCancelable(false)
+                .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                progressBar.setProgress(0);
+                setMoveCounterLevel();
+                recreate();
+            }
+        });
+        builder.show();
+    }
+
 
     // Method to check if two frequency pairs match
     private boolean checkMatch() {
@@ -292,8 +350,12 @@ public class GameplayActivity extends AppCompatActivity {
 
             // increment progress bar accordingly and update move counter
             incrementProgress(10);
-            moveCounter++;
-            String current = "Move: " + moveCounter;
+//            moveCounter++;
+//            String current = "Move: " + moveCounter;
+
+            // ***************
+            moveCounter--;
+            String current = "Moves Left: " + moveCounter;
             moveText.setText(current);
             return true;
         }
@@ -335,6 +397,7 @@ public class GameplayActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     // start a new activity (new game)
                     progressBar.setProgress(0);
+                    setMoveCounterLevel();
                     recreate();
                 }
             });
@@ -373,6 +436,7 @@ public class GameplayActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             // might be redundant
                             //timerRunning = false;
+                            setMoveCounterLevel();
                             recreate();
                         }
                     });
@@ -390,8 +454,8 @@ public class GameplayActivity extends AppCompatActivity {
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         textViewCountDown.setText(timeLeftFormatted);
 
-        // *********** color settings will be different if level is 5 or 6
-        if(level >= 5) {
+        // *********** color settings will be different if level is 4, 5 or 6
+        if(level >= 4) {
             if (minutes > 1) {
                 textViewCountDown.setTextColor(Color.GREEN);
             } else {
