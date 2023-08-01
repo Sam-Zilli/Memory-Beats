@@ -61,7 +61,7 @@ public class GameplayActivity extends AppCompatActivity {
     private long timeLeftInMillis = START_TIME_IN_MILLIS;
 
     // init level.  The main activity will pass the level into the gameplay activity which will then adjust the
-    // the timer
+    // the timer and number of moves to finish the level
     private int level = 0;
 
     ImageButton exitButton;
@@ -126,20 +126,21 @@ public class GameplayActivity extends AppCompatActivity {
         // Setting up countdown timer
         textViewCountDown = findViewById(R.id.text_countdown);
 
-        //************** adjusting countdown timer according to level
+        // Extract the level that is passed with intent
         level = getIntent().getIntExtra("levelKey", 1);
 
-        // initialize Move counter according to moves left
+        // Initialize Move counter according to moves left
         setMoveCounterLevel();
         // Setting up textview to display move counter
         moveText = findViewById(R.id.moveCounter);
         String s = "Moves left: " + moveCounter;
         moveText.setText(s);
 
+        // Adjust countdown timer according to level.
+        // For subsequent levels after level 1, the timer decreases by 20 seconds
         if (level > 1) {
             timeLeftInMillis = START_TIME_IN_MILLIS - (20000L * (level - 1));
         }
-        //START_TIME_IN_MILLIS = START_TIME_IN_MILLIS - (2L * level);
         startTimer();
 
         // Setting up exit button and onClickListener
@@ -161,6 +162,7 @@ public class GameplayActivity extends AppCompatActivity {
 //        moveText = findViewById(R.id.moveCounter);
     }
 
+    // This method will set up the number of moves players will have based on the level they have chosen
     private void setMoveCounterLevel() {
         if(level == 1) {
             moveCounter = 30;
@@ -173,6 +175,7 @@ public class GameplayActivity extends AppCompatActivity {
         }
     }
 
+    // Method no longer used, created for early testing of game logic
     private void initializeFrequencyList() {
         frequencyList.add(pair1);
         frequencyList.add(pair1);
@@ -269,13 +272,13 @@ public class GameplayActivity extends AppCompatActivity {
 //                            moveCounter++;
 //                            String current = "Move: " + moveCounter;
 
-                            // *****************
+                            // decrement move counter and display updated count
                             moveCounter--;
                             String current = "Moves Left: " + moveCounter;
                             moveText.setText(current);
                         }
                     }
-                    // ********************** check if exceed max moves allowed
+                    // Check if players have exhausted all moves.  If move counter equal 0, the game is over
                     if(moveCounter == 0) {
                         gameOver = true;
                         timerRunning = false;
@@ -299,15 +302,15 @@ public class GameplayActivity extends AppCompatActivity {
                     touchEvent(event.getAction());
                     return onTouchEvent(event);
                 }
-                // need to override perform click
             });
         }
     }
 
+    // Message dialog when players have exhausted all moves
     private void displayNoMovesLeftMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(GameplayActivity.this);
         builder.setMessage("You ran out of moves!  Better luck next time!")
-                .setTitle("No Moves Left");
+                .setTitle("You Lose");
         builder.setCancelable(false)
                 .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
                     @Override
@@ -319,6 +322,7 @@ public class GameplayActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 progressBar.setProgress(0);
+                // have to reset the move counter
                 setMoveCounterLevel();
                 recreate();
             }
@@ -353,7 +357,7 @@ public class GameplayActivity extends AppCompatActivity {
 //            moveCounter++;
 //            String current = "Move: " + moveCounter;
 
-            // ***************
+            // Decrement move counter and update text
             moveCounter--;
             String current = "Moves Left: " + moveCounter;
             moveText.setText(current);
@@ -454,7 +458,7 @@ public class GameplayActivity extends AppCompatActivity {
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         textViewCountDown.setText(timeLeftFormatted);
 
-        // *********** color settings will be different if level is 4, 5 or 6
+        // Color settings will be different if level is 4, 5 or 6
         if(level >= 4) {
             if (minutes > 1) {
                 textViewCountDown.setTextColor(Color.GREEN);
@@ -488,6 +492,7 @@ public class GameplayActivity extends AppCompatActivity {
         //super.onBackPressed();
     }
 
+    // Message dialog to confirm whether player wants to quit game in progress
     public void displayConfirmationMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(GameplayActivity.this);
         builder.setMessage("You are currently in a game session. You will lose all progress if you quit.  Are you sure you want to quit?")
@@ -503,6 +508,7 @@ public class GameplayActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 timerRunning = true;
+                // Resume timer
                 startTimer();
             }
         });
