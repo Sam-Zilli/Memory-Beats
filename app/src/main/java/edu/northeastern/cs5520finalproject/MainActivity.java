@@ -243,6 +243,8 @@ public class MainActivity extends AppCompatActivity {
                 // Perform action on click
                 //playA();
                 Intent intent = new Intent(MainActivity.this, GameplayActivity.class);
+                //**************** new: passing level to gameplay activity
+                intent.putExtra("levelKey", level);
                 startActivity(intent);
             }
         });

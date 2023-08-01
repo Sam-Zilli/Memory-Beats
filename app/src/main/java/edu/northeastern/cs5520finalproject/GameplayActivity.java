@@ -53,10 +53,15 @@ public class GameplayActivity extends AppCompatActivity {
     private TextView moveText;
 
     private static final long START_TIME_IN_MILLIS = 240000;
+    //private long START_TIME_IN_MILLIS = 240000;
     private TextView textViewCountDown;
     private CountDownTimer countDownTimer;
     private boolean timerRunning;
     private long timeLeftInMillis = START_TIME_IN_MILLIS;
+
+    // init level.  The main activity will pass the level into the gameplay activity which will then adjust the
+    // the timer
+    private int level = 0;
 
     ImageButton exitButton;
 
@@ -116,6 +121,13 @@ public class GameplayActivity extends AppCompatActivity {
 
         // Setting up countdown timer
         textViewCountDown = findViewById(R.id.text_countdown);
+
+        //************** adjusting countdown timer according to level
+        level = getIntent().getIntExtra("levelKey", 1);
+        if (level > 1) {
+            timeLeftInMillis = START_TIME_IN_MILLIS - (20000L * (level - 1));
+        }
+        //START_TIME_IN_MILLIS = START_TIME_IN_MILLIS - (2L * level);
         startTimer();
 
         // Setting up exit button and onClickListener
@@ -378,12 +390,27 @@ public class GameplayActivity extends AppCompatActivity {
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         textViewCountDown.setText(timeLeftFormatted);
 
-        // If countdown timer reaches below 3 minutes, text color changes to red
-        if(minutes > 2) {
-            textViewCountDown.setTextColor(Color.GREEN);
+        // *********** color settings will be different if level is 5 or 6
+        if(level >= 5) {
+            if (minutes > 1) {
+                textViewCountDown.setTextColor(Color.GREEN);
+            } else {
+                textViewCountDown.setTextColor(Color.RED);
+            }
         } else {
-            textViewCountDown.setTextColor(Color.RED);
+            if(minutes > 2) {
+                textViewCountDown.setTextColor(Color.GREEN);
+            } else {
+                textViewCountDown.setTextColor(Color.RED);
+            }
         }
+
+        // If countdown timer reaches below 3 minutes, text color changes to red
+//        if(minutes > 2) {
+//            textViewCountDown.setTextColor(Color.GREEN);
+//        } else {
+//            textViewCountDown.setTextColor(Color.RED);
+//        }
     }
 
     // Confirm if user wants to quit if game is currently running
