@@ -271,8 +271,11 @@ public class GameplayActivity extends AppCompatActivity {
                             moveText.setText(current);
                         }
                     }
+                    // Bug where you still lose if you successfully match all pairs with zero moves left - fixed
                     // Check if players have exhausted all moves.  If move counter equal 0, the game is over
-                    if(moveCounter == 0) {
+                    if(moveCounter == 0 && gameOver) {
+                        displayWinMessage();
+                    } else if(moveCounter == 0) {
                         gameOver = true;
                         timerRunning = false;
                         countDownTimer.cancel();
@@ -376,27 +379,28 @@ public class GameplayActivity extends AppCompatActivity {
         // if progress bar is full, game is over.  Now display You Win alert dialog
         if(progressBar.getProgress() == progressBar.getMax()) {
             countDownTimer.cancel();
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Congratulations! You have matched all pairs!")
-                    .setTitle("You Win!");
-            builder.setCancelable(false)
-                    .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // close activity and return to main menu
-                            finish();
-                        }
-                    });
-            builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // start a new activity (new game)
-                    progressBar.setProgress(0);
-                    setMoveCounterLevel();
-                    recreate();
-                }
-            });
-            builder.show();
+            displayWinMessage();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setMessage("Congratulations! You have matched all pairs!")
+//                    .setTitle("You Win!");
+//            builder.setCancelable(false)
+//                    .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            // close activity and return to main menu
+//                            finish();
+//                        }
+//                    });
+//            builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    // start a new activity (new game)
+//                    progressBar.setProgress(0);
+//                    setMoveCounterLevel();
+//                    recreate();
+//                }
+//            });
+//            builder.show();
         }
 
     }
@@ -494,6 +498,31 @@ public class GameplayActivity extends AppCompatActivity {
                 timerRunning = true;
                 // Resume timer
                 startTimer();
+            }
+        });
+        builder.show();
+    }
+
+    public void displayWinMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Congratulations! You have matched all pairs!")
+                .setTitle("You Win!");
+        builder.setCancelable(false)
+                .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // close activity and return to main menu
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // start a new activity (new game)
+                progressBar.setProgress(0);
+                gameOver = false;
+                setMoveCounterLevel();
+                recreate();
             }
         });
         builder.show();
