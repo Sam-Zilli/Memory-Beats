@@ -157,9 +157,6 @@ public class GameplayActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // Setting up textview to display move counter
-//        moveText = findViewById(R.id.moveCounter);
     }
 
     // This method will set up the number of moves players will have based on the level they have chosen
@@ -268,10 +265,6 @@ public class GameplayActivity extends AppCompatActivity {
                             // set flag to true if buttons do not match
                             resetButton = true;
 
-                            // increase move counter and display updated count
-//                            moveCounter++;
-//                            String current = "Move: " + moveCounter;
-
                             // decrement move counter and display updated count
                             moveCounter--;
                             String current = "Moves Left: " + moveCounter;
@@ -354,8 +347,6 @@ public class GameplayActivity extends AppCompatActivity {
 
             // increment progress bar accordingly and update move counter
             incrementProgress(10);
-//            moveCounter++;
-//            String current = "Move: " + moveCounter;
 
             // Decrement move counter and update text
             moveCounter--;
@@ -472,13 +463,6 @@ public class GameplayActivity extends AppCompatActivity {
                 textViewCountDown.setTextColor(Color.RED);
             }
         }
-
-        // If countdown timer reaches below 3 minutes, text color changes to red
-//        if(minutes > 2) {
-//            textViewCountDown.setTextColor(Color.GREEN);
-//        } else {
-//            textViewCountDown.setTextColor(Color.RED);
-//        }
     }
 
     // Confirm if user wants to quit if game is currently running
