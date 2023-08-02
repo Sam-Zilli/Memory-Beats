@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -53,10 +54,15 @@ public class GameplayActivity extends AppCompatActivity {
     private TextView moveText;
 
     private static final long START_TIME_IN_MILLIS = 240000;
+    //private long START_TIME_IN_MILLIS = 240000;
     private TextView textViewCountDown;
     private CountDownTimer countDownTimer;
     private boolean timerRunning;
     private long timeLeftInMillis = START_TIME_IN_MILLIS;
+
+    // init level.  The main activity will pass the level into the gameplay activity which will then adjust the
+    // the timer and number of moves to finish the level
+    private int level = 0;
 
     ImageButton exitButton;
 
@@ -66,10 +72,14 @@ public class GameplayActivity extends AppCompatActivity {
     ArrayList<Float> frequencyAList = new ArrayList<>(Arrays.asList(261.63f, 293.66f, 329.63f, 349.23f, 392.00f, 440.00f, 493.88f, 523.25f));
     ArrayList<Float> frequencyBList = new ArrayList<>(Arrays.asList(329.63f, 349.23f, 392.00f, 415.30f, 466.16f, 523.25f, 587.33f, 689.25f));
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameplay);
+
+        // locking the screen orientation to remain consistent with our main menu screen
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         ConstraintLayout constraintLayout = findViewById(R.id.gameLayout);
 
         // https://developer.android.com/reference/android/graphics/drawable/AnimationDrawable
@@ -116,6 +126,22 @@ public class GameplayActivity extends AppCompatActivity {
 
         // Setting up countdown timer
         textViewCountDown = findViewById(R.id.text_countdown);
+
+        // Extract the level that is passed with intent
+        level = getIntent().getIntExtra("levelKey", 1);
+
+        // Initialize Move counter according to moves left
+        setMoveCounterLevel();
+        // Setting up textview to display move counter
+        moveText = findViewById(R.id.moveCounter);
+        String s = "Moves left: " + moveCounter;
+        moveText.setText(s);
+
+        // Adjust countdown timer according to level.
+        // For subsequent levels after level 1, the timer decreases by 20 seconds
+        if (level > 1) {
+            timeLeftInMillis = START_TIME_IN_MILLIS - (20000L * (level - 1));
+        }
         startTimer();
 
         // Setting up exit button and onClickListener
@@ -132,11 +158,22 @@ public class GameplayActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // Setting up textview to display move counter
-        moveText = findViewById(R.id.moveCounter);
     }
 
+    // This method will set up the number of moves players will have based on the level they have chosen
+    private void setMoveCounterLevel() {
+        if(level == 1) {
+            moveCounter = 30;
+        } else if (level == 2 || level == 3) {
+            moveCounter = 25;
+        } else if (level == 4 || level == 5) {
+            moveCounter = 20;
+        } else {
+            moveCounter = 15;
+        }
+    }
+
+    // Method no longer used, created for early testing of game logic
     private void initializeFrequencyList() {
         frequencyList.add(pair1);
         frequencyList.add(pair1);
@@ -229,11 +266,21 @@ public class GameplayActivity extends AppCompatActivity {
                             // set flag to true if buttons do not match
                             resetButton = true;
 
-                            // increase move counter and display updated count
-                            moveCounter++;
-                            String current = "Move: " + moveCounter;
+                            // decrement move counter and display updated count
+                            moveCounter--;
+                            String current = "Moves Left: " + moveCounter;
                             moveText.setText(current);
                         }
+                    }
+                    // Bug where you still lose if you successfully match all pairs with zero moves left - fixed
+                    // Check if players have exhausted all moves.  If move counter equal 0, the game is over
+                    if(moveCounter == 0 && gameOver) {
+                        displayWinMessage();
+                    } else if(moveCounter == 0) {
+                        gameOver = true;
+                        timerRunning = false;
+                        countDownTimer.cancel();
+                        displayNoMovesLeftMessage();
                     }
                 }
             });
@@ -252,10 +299,34 @@ public class GameplayActivity extends AppCompatActivity {
                     touchEvent(event.getAction());
                     return onTouchEvent(event);
                 }
-                // need to override perform click
             });
         }
     }
+
+    // Message dialog when players have exhausted all moves
+    private void displayNoMovesLeftMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(GameplayActivity.this);
+        builder.setMessage("You ran out of moves!  Better luck next time!")
+                .setTitle("You Lose");
+        builder.setCancelable(false)
+                .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                progressBar.setProgress(0);
+                // have to reset the move counter
+                setMoveCounterLevel();
+                recreate();
+            }
+        });
+        builder.show();
+    }
+
 
     // Method to check if two frequency pairs match
     private boolean checkMatch() {
@@ -280,8 +351,10 @@ public class GameplayActivity extends AppCompatActivity {
 
             // increment progress bar accordingly and update move counter
             incrementProgress(10);
-            moveCounter++;
-            String current = "Move: " + moveCounter;
+
+            // Decrement move counter and update text
+            moveCounter--;
+            String current = "Moves Left: " + moveCounter;
             moveText.setText(current);
             return true;
         }
@@ -307,26 +380,7 @@ public class GameplayActivity extends AppCompatActivity {
         // if progress bar is full, game is over.  Now display You Win alert dialog
         if(progressBar.getProgress() == progressBar.getMax()) {
             countDownTimer.cancel();
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Congratulations! You have matched all pairs!")
-                    .setTitle("You Win!");
-            builder.setCancelable(false)
-                    .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // close activity and return to main menu
-                            finish();
-                        }
-                    });
-            builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // start a new activity (new game)
-                    progressBar.setProgress(0);
-                    recreate();
-                }
-            });
-            builder.show();
+            displayWinMessage();
         }
 
     }
@@ -361,6 +415,7 @@ public class GameplayActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             // might be redundant
                             //timerRunning = false;
+                            setMoveCounterLevel();
                             recreate();
                         }
                     });
@@ -378,11 +433,19 @@ public class GameplayActivity extends AppCompatActivity {
         String timeLeftFormatted = String.format(Locale.getDefault(),"%02d:%02d", minutes, seconds);
         textViewCountDown.setText(timeLeftFormatted);
 
-        // If countdown timer reaches below 3 minutes, text color changes to red
-        if(minutes > 2) {
-            textViewCountDown.setTextColor(Color.GREEN);
+        // Color settings will be different if level is 4, 5 or 6
+        if(level >= 4) {
+            if (minutes > 1) {
+                textViewCountDown.setTextColor(Color.GREEN);
+            } else {
+                textViewCountDown.setTextColor(Color.RED);
+            }
         } else {
-            textViewCountDown.setTextColor(Color.RED);
+            if(minutes > 2) {
+                textViewCountDown.setTextColor(Color.GREEN);
+            } else {
+                textViewCountDown.setTextColor(Color.RED);
+            }
         }
     }
 
@@ -397,6 +460,7 @@ public class GameplayActivity extends AppCompatActivity {
         //super.onBackPressed();
     }
 
+    // Message dialog to confirm whether player wants to quit game in progress
     public void displayConfirmationMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(GameplayActivity.this);
         builder.setMessage("You are currently in a game session. You will lose all progress if you quit.  Are you sure you want to quit?")
@@ -412,7 +476,33 @@ public class GameplayActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 timerRunning = true;
+                // Resume timer
                 startTimer();
+            }
+        });
+        builder.show();
+    }
+
+    public void displayWinMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Congratulations! You have matched all pairs!")
+                .setTitle("You Win!");
+        builder.setCancelable(false)
+                .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // close activity and return to main menu
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // start a new activity (new game)
+                progressBar.setProgress(0);
+                gameOver = false;
+                setMoveCounterLevel();
+                recreate();
             }
         });
         builder.show();

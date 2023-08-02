@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Insets;
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // ******************
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Drawable d = getDrawable(R.drawable.rybcolorwheel1536x1536withhole);
         Drawable dbackground = getDrawable(R.drawable.rybcolorwheel1536x1536mutednumbercontrast);
         wheel = new ImageView(this);
@@ -243,6 +246,8 @@ public class MainActivity extends AppCompatActivity {
                 // Perform action on click
                 //playA();
                 Intent intent = new Intent(MainActivity.this, GameplayActivity.class);
+                //**************** new: passing level to gameplay activity
+                intent.putExtra("levelKey", level);
                 startActivity(intent);
             }
         });
