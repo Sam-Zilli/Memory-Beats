@@ -72,6 +72,7 @@ public class GameplayActivity extends AppCompatActivity {
     ArrayList<Float> frequencyAList = new ArrayList<>(Arrays.asList(261.63f, 293.66f, 329.63f, 349.23f, 392.00f, 440.00f, 493.88f, 523.25f));
     ArrayList<Float> frequencyBList = new ArrayList<>(Arrays.asList(329.63f, 349.23f, 392.00f, 415.30f, 466.16f, 523.25f, 587.33f, 689.25f));
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -380,27 +381,6 @@ public class GameplayActivity extends AppCompatActivity {
         if(progressBar.getProgress() == progressBar.getMax()) {
             countDownTimer.cancel();
             displayWinMessage();
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage("Congratulations! You have matched all pairs!")
-//                    .setTitle("You Win!");
-//            builder.setCancelable(false)
-//                    .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            // close activity and return to main menu
-//                            finish();
-//                        }
-//                    });
-//            builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    // start a new activity (new game)
-//                    progressBar.setProgress(0);
-//                    setMoveCounterLevel();
-//                    recreate();
-//                }
-//            });
-//            builder.show();
         }
 
     }
