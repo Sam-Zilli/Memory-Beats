@@ -69,9 +69,10 @@ public class GameplayActivity extends AppCompatActivity {
     ProgressBar progressBar;
     ArrayList<FrequencyPairModel> frequencyList = new ArrayList<>();
     //*************************************************************
-    ArrayList<Float> frequencyAList = new ArrayList<>(Arrays.asList(261.63f, 293.66f, 329.63f, 349.23f, 392.00f, 440.00f, 493.88f, 523.25f));
-    ArrayList<Float> frequencyBList = new ArrayList<>(Arrays.asList(329.63f, 349.23f, 392.00f, 415.30f, 466.16f, 523.25f, 587.33f, 689.25f));
+    ArrayList<Float> frequencyAList = new ArrayList<>(Arrays.asList(440.00f, 440.00f, 440.00f, 440.00f, 440.00f, 440.00f, 440.00f, 440.00f));
 
+    //   maj2,   min3,     maj3,    p4,      p5,      6,        min7,     maj7,
+    ArrayList<Float> frequencyBList = new ArrayList<>(Arrays.asList(493.88f, 523.25f, 554.37f, 587.33f, 659.25f, 739.99f, 783.99f, 830.61f));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
