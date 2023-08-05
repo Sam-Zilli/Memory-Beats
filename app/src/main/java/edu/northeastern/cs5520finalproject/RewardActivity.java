@@ -3,7 +3,9 @@ package edu.northeastern.cs5520finalproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,11 +37,23 @@ public class RewardActivity extends AppCompatActivity {
         Boolean level5 = sharedPreferences.getBoolean("5", false);
         Boolean level6 = sharedPreferences.getBoolean("6", false);
 
+        ImageButton topLeft = findViewById(R.id.topLeft);
+        ImageButton topCenter = findViewById(R.id.topCenter);
+        ImageButton topRight = findViewById(R.id.topRight);
+        ImageButton bottomLeft = findViewById(R.id.bottomLeft);
+        ImageButton bottomCenter = findViewById(R.id.bottomCenter);
+        ImageButton bottomRight = findViewById(R.id.bottomRight);
+
+        // for testing - delete later
         levelsCompletedText.append(" " + String.valueOf(level1));
         levelsCompletedText.append(" " + String.valueOf(level2));
         levelsCompletedText.append(" " + String.valueOf(level3));
         levelsCompletedText.append(" " + String.valueOf(level4));
         levelsCompletedText.append(" " + String.valueOf(level5));
         levelsCompletedText.append(" " + String.valueOf(level6));
+
+        if(level1) {
+            topLeft.setImageResource(R.drawable.one);
+        }
     }
 }

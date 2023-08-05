@@ -6,6 +6,67 @@
     android:layout_height="match_parent"
     tools:context=".RewardActivity">
 
+    <ImageButton
+        android:id="@+id/bottomLeft"
+        android:layout_width="113dp"
+        android:layout_height="102dp"
+        android:layout_marginTop="102dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bottomCenter"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topLeft"
+        app:srcCompat="@drawable/background_2" />
+
+    <ImageButton
+        android:id="@+id/bottomCenter"
+        android:layout_width="113dp"
+        android:layout_height="102dp"
+        android:layout_marginTop="102dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/bottomRight"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/bottomLeft"
+        app:layout_constraintTop_toTopOf="@+id/topCenter"
+        app:srcCompat="@drawable/background_2" />
+
+    <ImageButton
+        android:id="@+id/bottomRight"
+        android:layout_width="113dp"
+        android:layout_height="102dp"
+        android:layout_marginTop="102dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/bottomCenter"
+        app:layout_constraintTop_toTopOf="@+id/topRight"
+        app:srcCompat="@drawable/background_2" />
+
+    <ImageButton
+        android:id="@+id/topRight"
+        android:layout_width="113dp"
+        android:layout_height="102dp"
+        android:contentDescription="image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/topCenter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/background_2" />
+
+    <ImageButton
+        android:id="@+id/topCenter"
+        android:layout_width="113dp"
+        android:layout_height="102dp"
+        android:contentDescription="image"
+        app:layout_constraintEnd_toStartOf="@+id/topRight"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/topLeft"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/background_2" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
@@ -14,25 +75,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="316dp"
-        android:layout_height="332dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomCenter"
+        app:layout_constraintVertical_bias="0.871" />
 
     <TextView
         android:id="@+id/listOfCompletedLevels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Levels Completed: "
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/bottomCenter" />
+
+    <ImageButton
+        android:id="@+id/topLeft"
+        android:layout_width="113dp"
+        android:layout_height="102dp"
+        android:contentDescription="image"
+        app:layout_constraintEnd_toStartOf="@+id/topCenter"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/background_2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
