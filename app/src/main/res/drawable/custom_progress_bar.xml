@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--https://stackoverflow.com/questions/16893209/how-to-customize-a-progress-bar-in-android-->
+<!--https://stackoverflow.com/questions/2122199/how-do-i-set-the-rounded-corner-radius-of-a-color-drawable-using-xml-->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
