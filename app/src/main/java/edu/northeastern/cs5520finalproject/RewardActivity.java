@@ -49,7 +49,7 @@ public class RewardActivity extends AppCompatActivity {
             two.setImageResource(R.drawable.two);
         }
         if(level3) {
-            three.setImageResource(R.drawable.two);
+            three.setImageResource(R.drawable.three);
         }
         if(level4) {
             four.setImageResource(R.drawable.four);
