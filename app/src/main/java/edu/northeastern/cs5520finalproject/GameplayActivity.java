@@ -288,16 +288,10 @@ public class GameplayActivity extends AppCompatActivity {
                         saveLevelBeat();
                         displayWinMessage();
                     } else if(moveCounter == 0) {
-                        // TESTING
-//                        gameOver = true;
-//                        timerRunning = false;
-//                        countDownTimer.cancel();
-//                        displayNoMovesLeftMessage();
-                        // DELETE AFTER TESTING:
-                        Log.i("Gameplay", String.valueOf(level).concat(" csfsdf"));
-                        saveLevelBeat();
-                        Log.i("Gameplay", String.valueOf(level).concat(" codfsfsdfß"));
-                        displayWinMessage();
+                        gameOver = true;
+                        timerRunning = false;
+                        countDownTimer.cancel();
+                        displayNoMovesLeftMessage();
                     }
                 }
             });
@@ -530,7 +524,6 @@ public class GameplayActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String stringLevel;
-
         switch (level) {
             case 1: level = 1;
                     stringLevel = "1";
