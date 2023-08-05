@@ -285,6 +285,9 @@ public class GameplayActivity extends AppCompatActivity {
                     }
                     // Bug where you still lose if you successfully match all pairs with zero moves left - fixed
                     // Check if players have exhausted all moves.  If move counter equal 0, the game is over
+                    // Two scenarios:
+                    // 1. Match all pairs with exactly 0 moves remaining --> win
+                    // 2. No moves left --> lose
                     if(moveCounter == 0 && gameOver) {
                         saveLevelBeat();
 
@@ -437,6 +440,7 @@ public class GameplayActivity extends AppCompatActivity {
 
         // if progress bar is full, game is over.  Now display You Win alert dialog
         if(progressBar.getProgress() == progressBar.getMax()) {
+            // stop timer when match all pairs
             countDownTimer.cancel();
             //***************************************************
             // save the level that the user beat
@@ -495,6 +499,8 @@ public class GameplayActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             // might be redundant
                             //timerRunning = false;
+                            // forgot to reset progress bar
+                            progressBar.setProgress(0);
                             setMoveCounterLevel();
                             recreate();
                         }
