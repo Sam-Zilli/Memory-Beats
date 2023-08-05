@@ -2,4 +2,6 @@
 <resources>
 
     <style name="user_Level"></style>
+
+    <style name="word_title"></style>
 </resources>
