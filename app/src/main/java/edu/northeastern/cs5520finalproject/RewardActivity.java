@@ -55,5 +55,20 @@ public class RewardActivity extends AppCompatActivity {
         if(level1) {
             topLeft.setImageResource(R.drawable.one);
         }
+        if(level2) {
+            topCenter.setImageResource(R.drawable.two);
+        }
+        if(level3) {
+            topRight.setImageResource(R.drawable.three);
+        }
+        if(level4) {
+            bottomLeft.setImageResource(R.drawable.four);
+        }
+        if(level5) {
+            bottomCenter.setImageResource(R.drawable.five);
+        }
+        if(level6) {
+            bottomRight.setImageResource(R.drawable.six);
+        }
     }
 }
