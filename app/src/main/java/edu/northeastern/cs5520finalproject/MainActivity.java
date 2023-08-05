@@ -3,6 +3,9 @@ package edu.northeastern.cs5520finalproject;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,6 +34,9 @@ import android.widget.TextView;
 
 //The below import is for soundpool, a tool for playing music notes.
 import android.media.SoundPool;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -77,54 +83,60 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+//delete later: sams for testing
+    public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
+
+    private UserLevelViewModel mUserLevelViewModel;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // ******************
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        Drawable d = getDrawable(R.drawable.rybcolorwheel1536x1536withhole);
-        Drawable dbackground = getDrawable(R.drawable.rybcolorwheel1536x1536mutednumbercontrast);
-        wheel = new ImageView(this);
-        wheelBackground= new ImageView(this);
-        wheel.setImageDrawable(d);
-        wheelBackground.setImageDrawable(dbackground);
-        setContentView(R.layout.activity_main);
-
-
-        totalRotation = 0;
-
-
-
-        //initialize the button to start game
-        startButton = new Button(this);
-        startButton.setText("Play");
-
-
-
-        //initialize the level textview
-        level = 1;
-        levelText = new TextView(this);
-        levelText.setText("LV: " + String.valueOf(level));
-
-
-
-
-        //The following codes are for setting up the soundpool
-
-        SoundPool.Builder builder = new SoundPool.Builder();
-        soundPool = builder.build();
-
-
-
-        //The mp3 files of the music note sound are in the "raw" folder inside res folder.
-
-        integerSoundIDa = soundPool.load(this, R.raw.a3, 1);
-        integerSoundIDb = soundPool.load(this, R.raw.b3, 1);
-        integerSoundIDc = soundPool.load(this, R.raw.c3, 1);
-        integerSoundIDd = soundPool.load(this, R.raw.d3, 1);
-        integerSoundIDe = soundPool.load(this, R.raw.e3, 1);
-        integerSoundIDf = soundPool.load(this, R.raw.f3, 1);
-        integerSoundIDg = soundPool.load(this, R.raw.g3, 1);
+//        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        Drawable d = getDrawable(R.drawable.rybcolorwheel1536x1536withhole);
+//        Drawable dbackground = getDrawable(R.drawable.rybcolorwheel1536x1536mutednumbercontrast);
+//        wheel = new ImageView(this);
+//        wheelBackground= new ImageView(this);
+//        wheel.setImageDrawable(d);
+//        wheelBackground.setImageDrawable(dbackground);
+//        setContentView(R.layout.activity_main);
+//
+//
+//        totalRotation = 0;
+//
+//
+//
+//        //initialize the button to start game
+//        startButton = new Button(this);
+//        startButton.setText("Play");
+//
+//
+//
+//        //initialize the level textview
+//        level = 1;
+//        levelText = new TextView(this);
+//        levelText.setText("LV: " + String.valueOf(level));
+//
+//
+//
+//
+//        //The following codes are for setting up the soundpool
+//
+//        SoundPool.Builder builder = new SoundPool.Builder();
+//        soundPool = builder.build();
+//
+//
+//
+//        //The mp3 files of the music note sound are in the "raw" folder inside res folder.
+//
+//        integerSoundIDa = soundPool.load(this, R.raw.a3, 1);
+//        integerSoundIDb = soundPool.load(this, R.raw.b3, 1);
+//        integerSoundIDc = soundPool.load(this, R.raw.c3, 1);
+//        integerSoundIDd = soundPool.load(this, R.raw.d3, 1);
+//        integerSoundIDe = soundPool.load(this, R.raw.e3, 1);
+//        integerSoundIDf = soundPool.load(this, R.raw.f3, 1);
+//        integerSoundIDg = soundPool.load(this, R.raw.g3, 1);
 
 
         /**
@@ -138,119 +150,119 @@ public class MainActivity extends AppCompatActivity {
          */
 
 
-
-
-        //The following code makes a music sheet
-        //musicSheet = "BAGACDCBCEFED#EBAG#ABAG#ACACBAGABAGABAGF#EBAG#ACDCBCEFED#EBAG#ABAG#ACACBAGABAGABAGF#EBAG#AEFGGAGFEDEFGGAGFEDCDEEFEDCCDEEFEDCBAG#ACDCBCEFED#EBAG#ABAG#ACABCBAG#AEFDCBA";
-        musicSheet = "EDCDEEE#DDDEGG#EDCDEEE#EDDEDC#";
-        //musicSheet = "GGDDEED#CCBBAAG#DDCCBBA#DDCCBBA#GGDDEED#CCBBAAG";
-        //musicSheet = "FFEEDDC#";
-        musicSheetLength = musicSheet.length();
-
-
-
-
-
-
-
-        //The following codes are just to add the wheel and the wheel background to the layout. When created the wheel's
-        // coordinate (the left upper corne of the button)  is at (0,0)
-        ConstraintLayout CL = findViewById(R.id.constraintLayout);
-        ConstraintSet set = new ConstraintSet();
-        wheel.setId(View.generateViewId());  // cannot set id after add
-        CL.addView(wheel,0);
-        set.clone(CL);
-        set.connect(wheel.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
-        set.applyTo(CL); // apply to layout
-
-        set = new ConstraintSet();
-        wheelBackground.setId(View.generateViewId());  // cannot set id after add
-        CL.addView(wheelBackground,0);
-        set.clone(CL);
-        set.connect(wheelBackground.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
-
-        //The following codes are just to add the start play button to the layout. When created the button's
-        // coordinate (the left upper corne of the button)  is at (0,0)
-        set = new ConstraintSet();
-        startButton.setId(View.generateViewId());  // cannot set id after add
-        CL.addView(startButton,0);
-        set.clone(CL);
-        set.connect(startButton.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
-
-
-
-        //The following codes are just to add the level textview to the layout. When created the textview's
-        // coordinate (the left upper corne of the button)  is at (0,0)
-        set = new ConstraintSet();
-        levelText.setId(View.generateViewId());  // cannot set id after add
-        CL.addView(levelText,0);
-        set.clone(CL);
-        set.connect(levelText.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //setContentView(wheel);
-        //setContentView(CL);
-        //setContentView(wheelBackground);
-
-
-        wheel.setScaleType(ImageView.ScaleType.MATRIX);
-        wheelBackground.setScaleType(ImageView.ScaleType.MATRIX);
-        final float[] dimensions = getWindowSize(this);
-        screenWidth = dimensions[0];
-        screenHeight = dimensions[1];
-        matrix = setCenterAndScale(screenWidth, screenHeight, d);
-        Matrix backgroundMatrix = setCenterAndScale(screenWidth, screenHeight, dbackground);
-        wheel.setImageMatrix(matrix);
-        wheelBackground.setImageMatrix(backgroundMatrix);
-        wheel.setOnTouchListener(new WheelOnTouchListener(wheel, matrix));
-
-
-        //The following code is to resize and place the button at the right place
-        startButton.setWidth(Math.round(calculateButtonWidth(screenWidth, screenHeight)));
-        startButton.setHeight(Math.round(calculateButtonHeight(screenWidth, screenHeight)));
-        startButton.setX(calculateButtonX(screenWidth,screenHeight));
-        startButton.setY(calculateButtonY(screenWidth,screenHeight));
-        startButton.setTextSize(screenWidth / 32);
-
-        //The following code is to resize and place the level textview at the right place
-        levelText.setWidth(Math.round(calculateLevelViewWidth(screenWidth, screenHeight)));
-        levelText.setHeight(Math.round(calculateLevelViewHeight(screenWidth, screenHeight)));
-        levelText.setX(calculateLevelViewX(screenWidth,screenHeight));
-        levelText.setY(calculateLevelViewY(screenWidth,screenHeight));
-        Log.i("heyhey",String.valueOf(Math.round(calculateLevelViewHeight(screenWidth, screenHeight))));
-        levelText.setTextSize(screenWidth / 28);
-        levelText.setGravity(Gravity.CENTER);
-
-
-
-
-        startButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                //playA();
-                Intent intent = new Intent(MainActivity.this, GameplayActivity.class);
-                //**************** new: passing level to gameplay activity
-                intent.putExtra("levelKey", level);
-                startActivity(intent);
-            }
-        });
+//
+//
+//        //The following code makes a music sheet
+//        //musicSheet = "BAGACDCBCEFED#EBAG#ABAG#ACACBAGABAGABAGF#EBAG#ACDCBCEFED#EBAG#ABAG#ACACBAGABAGABAGF#EBAG#AEFGGAGFEDEFGGAGFEDCDEEFEDCCDEEFEDCBAG#ACDCBCEFED#EBAG#ABAG#ACABCBAG#AEFDCBA";
+//        musicSheet = "EDCDEEE#DDDEGG#EDCDEEE#EDDEDC#";
+//        //musicSheet = "GGDDEED#CCBBAAG#DDCCBBA#DDCCBBA#GGDDEED#CCBBAAG";
+//        //musicSheet = "FFEEDDC#";
+//        musicSheetLength = musicSheet.length();
+//
+//
+//
+//
+//
+//
+//
+//        //The following codes are just to add the wheel and the wheel background to the layout. When created the wheel's
+//        // coordinate (the left upper corne of the button)  is at (0,0)
+//        ConstraintLayout CL = findViewById(R.id.constraintLayout);
+//        ConstraintSet set = new ConstraintSet();
+//        wheel.setId(View.generateViewId());  // cannot set id after add
+//        CL.addView(wheel,0);
+//        set.clone(CL);
+//        set.connect(wheel.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
+//        set.applyTo(CL); // apply to layout
+//
+//        set = new ConstraintSet();
+//        wheelBackground.setId(View.generateViewId());  // cannot set id after add
+//        CL.addView(wheelBackground,0);
+//        set.clone(CL);
+//        set.connect(wheelBackground.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
+//
+//        //The following codes are just to add the start play button to the layout. When created the button's
+//        // coordinate (the left upper corne of the button)  is at (0,0)
+//        set = new ConstraintSet();
+//        startButton.setId(View.generateViewId());  // cannot set id after add
+//        CL.addView(startButton,0);
+//        set.clone(CL);
+//        set.connect(startButton.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
+//
+//
+//
+//        //The following codes are just to add the level textview to the layout. When created the textview's
+//        // coordinate (the left upper corne of the button)  is at (0,0)
+//        set = new ConstraintSet();
+//        levelText.setId(View.generateViewId());  // cannot set id after add
+//        CL.addView(levelText,0);
+//        set.clone(CL);
+//        set.connect(levelText.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//        //setContentView(wheel);
+//        //setContentView(CL);
+//        //setContentView(wheelBackground);
+//
+//
+//        wheel.setScaleType(ImageView.ScaleType.MATRIX);
+//        wheelBackground.setScaleType(ImageView.ScaleType.MATRIX);
+//        final float[] dimensions = getWindowSize(this);
+//        screenWidth = dimensions[0];
+//        screenHeight = dimensions[1];
+//        matrix = setCenterAndScale(screenWidth, screenHeight, d);
+//        Matrix backgroundMatrix = setCenterAndScale(screenWidth, screenHeight, dbackground);
+//        wheel.setImageMatrix(matrix);
+//        wheelBackground.setImageMatrix(backgroundMatrix);
+//        wheel.setOnTouchListener(new WheelOnTouchListener(wheel, matrix));
+//
+//
+//        //The following code is to resize and place the button at the right place
+//        startButton.setWidth(Math.round(calculateButtonWidth(screenWidth, screenHeight)));
+//        startButton.setHeight(Math.round(calculateButtonHeight(screenWidth, screenHeight)));
+//        startButton.setX(calculateButtonX(screenWidth,screenHeight));
+//        startButton.setY(calculateButtonY(screenWidth,screenHeight));
+//        startButton.setTextSize(screenWidth / 32);
+//
+//        //The following code is to resize and place the level textview at the right place
+//        levelText.setWidth(Math.round(calculateLevelViewWidth(screenWidth, screenHeight)));
+//        levelText.setHeight(Math.round(calculateLevelViewHeight(screenWidth, screenHeight)));
+//        levelText.setX(calculateLevelViewX(screenWidth,screenHeight));
+//        levelText.setY(calculateLevelViewY(screenWidth,screenHeight));
+//        Log.i("heyhey",String.valueOf(Math.round(calculateLevelViewHeight(screenWidth, screenHeight))));
+//        levelText.setTextSize(screenWidth / 28);
+//        levelText.setGravity(Gravity.CENTER);
+//
+//
+//
+//
+//        startButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                // Perform action on click
+//                //playA();
+//                Intent intent = new Intent(MainActivity.this, GameplayActivity.class);
+//                //**************** new: passing level to gameplay activity
+//                intent.putExtra("levelKey", level);
+//                startActivity(intent);
+//            }
+//        });
 
 
 
@@ -316,7 +328,58 @@ public class MainActivity extends AppCompatActivity {
          **/
 
 
+
+
+// delete later: for testing
+        setContentView(R.layout.activity_main);
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        final UserLevelListAdapter adapter = new UserLevelListAdapter(new UserLevelListAdapter.UserLevelDiff());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        mUserLevelViewModel = new ViewModelProvider(this).get(UserLevelViewModel.class);
+
+        // Add an observer on the LiveData returned by getAlphabetizedWords.
+        // The onChanged() method fires when the observed data changes and the activity is
+        // in the foreground.
+        mUserLevelViewModel.getLevels().observe(this, userLevels -> {
+            // Update the cached copy of the words in the adapter.
+            adapter.submitList(userLevels);
+        });
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, NewLevelActivity.class);
+            startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
+        });
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            UserLevel userLevel = new UserLevel(data.getStringExtra(NewLevelActivity.EXTRA_REPLY));
+            mUserLevelViewModel.insert(userLevel);
+        } else {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "in the toast text",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
