@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
@@ -16,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ public class GameplayActivity extends AppCompatActivity {
 
     private float frequency1;
     private float frequency2;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
 
     private int moveCounter = 0;
 
@@ -133,6 +137,11 @@ public class GameplayActivity extends AppCompatActivity {
 
         // Initialize Move counter according to moves left
         setMoveCounterLevel();
+
+        // Setting gameplay textview to show user what level they are on
+        TextView levelText = findViewById(R.id.levelText);
+        levelText.setText("Level: " + level);
+
         // Setting up textview to display move counter
         moveText = findViewById(R.id.moveCounter);
         String s = "Moves left: " + moveCounter;
@@ -276,12 +285,20 @@ public class GameplayActivity extends AppCompatActivity {
                     // Bug where you still lose if you successfully match all pairs with zero moves left - fixed
                     // Check if players have exhausted all moves.  If move counter equal 0, the game is over
                     if(moveCounter == 0 && gameOver) {
+                        Log.i("Gameplay", String.valueOf(level).concat(" csfsdf"));
+                        saveLevelBeat();
+                        Log.i("Gameplay", String.valueOf(level).concat(" codfsfsdfß"));
                         displayWinMessage();
                     } else if(moveCounter == 0) {
-                        gameOver = true;
-                        timerRunning = false;
-                        countDownTimer.cancel();
-                        displayNoMovesLeftMessage();
+                        // TESTING
+//                        gameOver = true;
+//                        timerRunning = false;
+//                        countDownTimer.cancel();
+//                        displayNoMovesLeftMessage();
+                        Log.i("Gameplay", String.valueOf(level).concat(" csfsdf"));
+                        saveLevelBeat();
+                        Log.i("Gameplay", String.valueOf(level).concat(" codfsfsdfß"));
+                        displayWinMessage();
                     }
                 }
             });
@@ -507,6 +524,42 @@ public class GameplayActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    public void saveLevelBeat(){
+        Log.i("Gameplay", String.valueOf(level).concat("before shared prefs"));
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String stringLevel;
+
+        switch (level) {
+            case 1: level = 1;
+                    stringLevel = "1";
+                    break;
+            case 2: level = 2;
+                    stringLevel = "2";
+                    break;
+            case 3: level = 3;
+                    stringLevel = "3";
+                    break;
+            case 4: level = 4;
+                    stringLevel = "4";
+                    break;
+            case 5: level = 5;
+                    stringLevel = "5";
+                    break;
+            case 6: level = 6;
+                    stringLevel = "6";
+                    break;
+            default: stringLevel = "1";
+                     break;
+        }
+
+        editor.putBoolean(stringLevel, true);
+        Log.i("Gameplay", String.valueOf(level).concat("prefs shared"));
+        editor.apply();
+
     }
 }
 
