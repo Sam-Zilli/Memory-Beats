@@ -524,28 +524,7 @@ public class GameplayActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String stringLevel;
-        switch (level) {
-            case 1: level = 1;
-                    stringLevel = "1";
-                    break;
-            case 2: level = 2;
-                    stringLevel = "2";
-                    break;
-            case 3: level = 3;
-                    stringLevel = "3";
-                    break;
-            case 4: level = 4;
-                    stringLevel = "4";
-                    break;
-            case 5: level = 5;
-                    stringLevel = "5";
-                    break;
-            case 6: level = 6;
-                    stringLevel = "6";
-                    break;
-            default: stringLevel = "1";
-                     break;
-        }
+        stringLevel = String.valueOf(level);
         editor.putBoolean(stringLevel, true);
         editor.apply();
     }
