@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -291,10 +292,14 @@ public class GameplayActivity extends AppCompatActivity {
                         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
                         String key = "hasWon" + level;
                         boolean hasWonLevelBefore = sharedPreferences.getBoolean(key, false);
+
+                        // if the player hasn't won the level before
                         if(!hasWonLevelBefore) {
+                            // update the boolean value from false to true
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putBoolean(key, true);
                             editor.apply();
+                            // display first win message
                             displayFirstWinMessage();
                         } else {
                             displayWinMessage();
@@ -327,15 +332,19 @@ public class GameplayActivity extends AppCompatActivity {
         }
     }
 
+    // exclusive message that shows the first time a player wins a level. Player will be notified that a reward
+    // has been unlocked and can be viewed in the gallery page
     private void displayFirstWinMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Congratulation, you have matched all pairs! You have unlocked a reward! Go to gallery from main page to view reward.")
                 .setTitle("You Win!");
         builder.setCancelable(false)
-                .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Go to Gallery", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // close activity and return to main menu
+                        // open rewards activity page
+                        Intent intent = new Intent(GameplayActivity.this, RewardActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 });
@@ -430,18 +439,25 @@ public class GameplayActivity extends AppCompatActivity {
         if(progressBar.getProgress() == progressBar.getMax()) {
             countDownTimer.cancel();
             //***************************************************
+            // save the level that the user beat
             saveLevelBeat();
 
-            // check if player has won level before
+            // check if player has won current level before
             SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
             String key = "hasWon" + level;
             boolean hasWonLevelBefore = sharedPreferences.getBoolean(key, false);
+
+            // if the player hasn't won the level before
             if(!hasWonLevelBefore) {
+                // update the boolean value from false to true
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean(key, true);
                 editor.apply();
+                // display first win message. This message will tell users that they unlocked a reward
+                // and that they can check the reward in the gallery page
                 displayFirstWinMessage();
             } else {
+                // if the user has already completed the level, it will show the default win message
                 displayWinMessage();
             }
             //displayWinMessage();

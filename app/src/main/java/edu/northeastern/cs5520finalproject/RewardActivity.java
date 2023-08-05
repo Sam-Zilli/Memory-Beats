@@ -2,6 +2,7 @@ package edu.northeastern.cs5520finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
@@ -22,6 +23,16 @@ public class RewardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reward);
         loadImages();
+    }
+
+    // this is causing an audio bug.  Bug seems to be fixed
+    // pressing back button will redirect to main activity page and not gameplay page
+    @Override
+    public void onBackPressed() {
+        //finish();
+        Intent intent = new Intent(RewardActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void loadImages() {
