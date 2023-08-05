@@ -339,7 +339,7 @@ public class GameplayActivity extends AppCompatActivity {
     // has been unlocked and can be viewed in the gallery page
     private void displayFirstWinMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Congratulation, you have matched all pairs! You have unlocked a reward! Go to gallery from main page to view reward.")
+        builder.setMessage("Congratulation, you have matched all pairs! You have unlocked a reward! Go to gallery to view reward.")
                 .setTitle("You Win!");
         builder.setCancelable(false)
                 .setNegativeButton("Go to Gallery", new DialogInterface.OnClickListener() {
