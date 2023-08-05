@@ -7,97 +7,90 @@
     tools:context=".RewardActivity">
 
     <ImageButton
-        android:id="@+id/bottomLeft"
-        android:layout_width="113dp"
-        android:layout_height="102dp"
-        android:layout_marginTop="102dp"
+        android:id="@+id/three"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:contentDescription="image"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toStartOf="@+id/bottomCenter"
+        app:layout_constraintBottom_toTopOf="@+id/five"
+        app:layout_constraintEnd_toStartOf="@+id/four"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLeft"
-        app:srcCompat="@drawable/background_2" />
+        app:layout_constraintTop_toBottomOf="@+id/one"
+        app:srcCompat="@drawable/lock" />
 
     <ImageButton
-        android:id="@+id/bottomCenter"
-        android:layout_width="113dp"
-        android:layout_height="102dp"
-        android:layout_marginTop="102dp"
+        android:id="@+id/five"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:contentDescription="image"
-        app:layout_constraintBottom_toTopOf="@+id/listOfCompletedLevels"
-        app:layout_constraintEnd_toStartOf="@+id/bottomRight"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/six"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/bottomLeft"
-        app:layout_constraintTop_toBottomOf="@+id/topCenter"
-        app:srcCompat="@drawable/background_2" />
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/three"
+        app:srcCompat="@drawable/lock" />
 
     <ImageButton
-        android:id="@+id/bottomRight"
-        android:layout_width="113dp"
-        android:layout_height="102dp"
-        android:layout_marginTop="102dp"
+        android:id="@+id/six"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:contentDescription="image"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bottomCenter"
-        app:layout_constraintTop_toBottomOf="@+id/topRight"
-        app:srcCompat="@drawable/background_2" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/five"
+        app:layout_constraintTop_toBottomOf="@+id/four"
+        app:srcCompat="@drawable/lock" />
 
     <ImageButton
-        android:id="@+id/topRight"
-        android:layout_width="113dp"
-        android:layout_height="102dp"
+        android:id="@+id/two"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:contentDescription="image"
-        app:layout_constraintBottom_toTopOf="@+id/bottomRight"
+        app:layout_constraintBottom_toTopOf="@+id/four"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/topCenter"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/one"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/background_2" />
+        app:srcCompat="@drawable/lock" />
 
     <ImageButton
-        android:id="@+id/topCenter"
-        android:layout_width="113dp"
-        android:layout_height="102dp"
+        android:id="@+id/four"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:contentDescription="image"
-        app:layout_constraintBottom_toTopOf="@+id/bottomCenter"
-        app:layout_constraintEnd_toStartOf="@+id/topRight"
-        app:layout_constraintStart_toEndOf="@+id/topLeft"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/background_2" />
+        app:layout_constraintBottom_toTopOf="@+id/six"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/three"
+        app:layout_constraintTop_toBottomOf="@+id/two"
+        app:srcCompat="@drawable/lock" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="342dp"
         android:text="Go To Home Page"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottomCenter" />
-
-    <TextView
-        android:id="@+id/listOfCompletedLevels"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Levels Completed: "
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bottomCenter" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/topLeft"
-        android:layout_width="113dp"
-        android:layout_height="102dp"
+        android:id="@+id/one"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:contentDescription="image"
-        app:layout_constraintBottom_toTopOf="@+id/bottomLeft"
-        app:layout_constraintEnd_toStartOf="@+id/topCenter"
+        app:layout_constraintBottom_toTopOf="@+id/three"
+        app:layout_constraintEnd_toStartOf="@+id/two"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/background_2" />
+        app:srcCompat="@drawable/lock" />
 </androidx.constraintlayout.widget.ConstraintLayout>

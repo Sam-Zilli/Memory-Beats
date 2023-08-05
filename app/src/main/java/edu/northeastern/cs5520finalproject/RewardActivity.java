@@ -27,8 +27,6 @@ public class RewardActivity extends AppCompatActivity {
     public void loadImages() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
-        TextView levelsCompletedText = findViewById(R.id.listOfCompletedLevels);
-
         // default value is false
         Boolean level1 = sharedPreferences.getBoolean("1", false);
         Boolean level2 = sharedPreferences.getBoolean("2", false);
@@ -37,38 +35,30 @@ public class RewardActivity extends AppCompatActivity {
         Boolean level5 = sharedPreferences.getBoolean("5", false);
         Boolean level6 = sharedPreferences.getBoolean("6", false);
 
-        ImageButton topLeft = findViewById(R.id.topLeft);
-        ImageButton topCenter = findViewById(R.id.topCenter);
-        ImageButton topRight = findViewById(R.id.topRight);
-        ImageButton bottomLeft = findViewById(R.id.bottomLeft);
-        ImageButton bottomCenter = findViewById(R.id.bottomCenter);
-        ImageButton bottomRight = findViewById(R.id.bottomRight);
-
-        // for testing - delete later
-        levelsCompletedText.append(" " + String.valueOf(level1));
-        levelsCompletedText.append(" " + String.valueOf(level2));
-        levelsCompletedText.append(" " + String.valueOf(level3));
-        levelsCompletedText.append(" " + String.valueOf(level4));
-        levelsCompletedText.append(" " + String.valueOf(level5));
-        levelsCompletedText.append(" " + String.valueOf(level6));
+        ImageButton one = findViewById(R.id.one);
+        ImageButton two= findViewById(R.id.two);
+        ImageButton three = findViewById(R.id.three);
+        ImageButton four = findViewById(R.id.four);
+        ImageButton five = findViewById(R.id.five);
+        ImageButton six = findViewById(R.id.six);
 
         if(level1) {
-            topLeft.setImageResource(R.drawable.one);
+            one.setImageResource(R.drawable.one);
         }
         if(level2) {
-            topCenter.setImageResource(R.drawable.two);
+            two.setImageResource(R.drawable.two);
         }
         if(level3) {
-            topRight.setImageResource(R.drawable.three);
+            three.setImageResource(R.drawable.three);
         }
         if(level4) {
-            bottomLeft.setImageResource(R.drawable.four);
+            four.setImageResource(R.drawable.four);
         }
         if(level5) {
-            bottomCenter.setImageResource(R.drawable.five);
+            five.setImageResource(R.drawable.five);
         }
         if(level6) {
-            bottomRight.setImageResource(R.drawable.six);
+            six.setImageResource(R.drawable.six);
         }
     }
 }

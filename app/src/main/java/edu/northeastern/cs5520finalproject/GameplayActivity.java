@@ -285,9 +285,7 @@ public class GameplayActivity extends AppCompatActivity {
                     // Bug where you still lose if you successfully match all pairs with zero moves left - fixed
                     // Check if players have exhausted all moves.  If move counter equal 0, the game is over
                     if(moveCounter == 0 && gameOver) {
-                        Log.i("Gameplay", String.valueOf(level).concat(" csfsdf"));
                         saveLevelBeat();
-                        Log.i("Gameplay", String.valueOf(level).concat(" codfsfsdfß"));
                         displayWinMessage();
                     } else if(moveCounter == 0) {
                         // TESTING
@@ -295,6 +293,7 @@ public class GameplayActivity extends AppCompatActivity {
 //                        timerRunning = false;
 //                        countDownTimer.cancel();
 //                        displayNoMovesLeftMessage();
+                        // DELETE AFTER TESTING:
                         Log.i("Gameplay", String.valueOf(level).concat(" csfsdf"));
                         saveLevelBeat();
                         Log.i("Gameplay", String.valueOf(level).concat(" codfsfsdfß"));
@@ -526,11 +525,10 @@ public class GameplayActivity extends AppCompatActivity {
         builder.show();
     }
 
+    // This method saves the level that the user beat in shared preferences to be used by gallery
     public void saveLevelBeat(){
-        Log.i("Gameplay", String.valueOf(level).concat("before shared prefs"));
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         String stringLevel;
 
         switch (level) {
@@ -555,11 +553,8 @@ public class GameplayActivity extends AppCompatActivity {
             default: stringLevel = "1";
                      break;
         }
-
         editor.putBoolean(stringLevel, true);
-        Log.i("Gameplay", String.valueOf(level).concat("prefs shared"));
         editor.apply();
-
     }
 }
 
