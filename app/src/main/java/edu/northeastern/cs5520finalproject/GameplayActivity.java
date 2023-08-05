@@ -286,7 +286,20 @@ public class GameplayActivity extends AppCompatActivity {
                     // Check if players have exhausted all moves.  If move counter equal 0, the game is over
                     if(moveCounter == 0 && gameOver) {
                         saveLevelBeat();
-                        displayWinMessage();
+
+                        // check if player has won level before
+                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                        String key = "hasWon" + level;
+                        boolean hasWonLevelBefore = sharedPreferences.getBoolean(key, false);
+                        if(!hasWonLevelBefore) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean(key, true);
+                            editor.apply();
+                            displayFirstWinMessage();
+                        } else {
+                            displayWinMessage();
+                        }
+                        //displayWinMessage();
                     } else if(moveCounter == 0) {
                         gameOver = true;
                         timerRunning = false;
@@ -312,6 +325,31 @@ public class GameplayActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void displayFirstWinMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Congratulation, you have matched all pairs! You have unlocked a reward! Go to gallery from main page to view reward.")
+                .setTitle("You Win!");
+        builder.setCancelable(false)
+                .setNegativeButton("Return to Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // close activity and return to main menu
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // start a new activity (new game)
+                progressBar.setProgress(0);
+                gameOver = false;
+                setMoveCounterLevel();
+                recreate();
+            }
+        });
+        builder.show();
     }
 
     // Message dialog when players have exhausted all moves
@@ -391,7 +429,22 @@ public class GameplayActivity extends AppCompatActivity {
         // if progress bar is full, game is over.  Now display You Win alert dialog
         if(progressBar.getProgress() == progressBar.getMax()) {
             countDownTimer.cancel();
-            displayWinMessage();
+            //***************************************************
+            saveLevelBeat();
+
+            // check if player has won level before
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            String key = "hasWon" + level;
+            boolean hasWonLevelBefore = sharedPreferences.getBoolean(key, false);
+            if(!hasWonLevelBefore) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(key, true);
+                editor.apply();
+                displayFirstWinMessage();
+            } else {
+                displayWinMessage();
+            }
+            //displayWinMessage();
         }
 
     }
