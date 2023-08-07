@@ -6,19 +6,91 @@
     android:layout_height="match_parent"
     tools:context=".RewardActivity">
 
+    <ImageButton
+        android:id="@+id/three"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toTopOf="@+id/five"
+        app:layout_constraintEnd_toStartOf="@+id/four"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/one"
+        app:srcCompat="@drawable/lock" />
+
+    <ImageButton
+        android:id="@+id/five"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/six"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/three"
+        app:srcCompat="@drawable/lock" />
+
+    <ImageButton
+        android:id="@+id/six"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/five"
+        app:layout_constraintTop_toBottomOf="@+id/four"
+        app:srcCompat="@drawable/lock" />
+
+    <ImageButton
+        android:id="@+id/two"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toTopOf="@+id/four"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/one"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/lock" />
+
+    <ImageButton
+        android:id="@+id/four"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toTopOf="@+id/six"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/three"
+        app:layout_constraintTop_toBottomOf="@+id/two"
+        app:srcCompat="@drawable/lock" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="342dp"
         android:text="Go To Home Page"
-        tools:layout_editor_absoluteX="124dp"
-        tools:layout_editor_absoluteY="529dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="316dp"
-        android:layout_height="332dp"
-        tools:layout_editor_absoluteX="47dp"
-        tools:layout_editor_absoluteY="154dp"
-        tools:srcCompat="@tools:sample/avatars" />
+    <ImageButton
+        android:id="@+id/one"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="image"
+        app:layout_constraintBottom_toTopOf="@+id/three"
+        app:layout_constraintEnd_toStartOf="@+id/two"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/lock" />
 </androidx.constraintlayout.widget.ConstraintLayout>

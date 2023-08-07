@@ -6,6 +6,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
@@ -16,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -48,6 +51,8 @@ public class GameplayActivity extends AppCompatActivity {
 
     private float frequency1;
     private float frequency2;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
 
     private int moveCounter = 0;
 
@@ -133,6 +138,11 @@ public class GameplayActivity extends AppCompatActivity {
 
         // Initialize Move counter according to moves left
         setMoveCounterLevel();
+
+        // Setting gameplay textview to show user what level they are on
+        TextView levelText = findViewById(R.id.levelText);
+        levelText.setText("Level: " + level);
+
         // Setting up textview to display move counter
         moveText = findViewById(R.id.moveCounter);
         String s = "Moves left: " + moveCounter;
@@ -275,8 +285,32 @@ public class GameplayActivity extends AppCompatActivity {
                     }
                     // Bug where you still lose if you successfully match all pairs with zero moves left - fixed
                     // Check if players have exhausted all moves.  If move counter equal 0, the game is over
-                    if(moveCounter == 0 && gameOver) {
-                        displayWinMessage();
+                    // Two scenarios:
+                    // 1. Match all pairs with exactly 0 moves remaining --> win
+                    // 2. No moves left --> lose
+                    if(moveCounter == 0 && gameOver || progressBar.getProgress() == progressBar.getMax()) {
+                        saveLevelBeat();
+                        countDownTimer.cancel();
+
+                        // check if player has won level before
+                        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                        String key = "hasWon" + level;
+                        boolean hasWonLevelBefore = sharedPreferences.getBoolean(key, false);
+
+                        // if the player hasn't won the level before
+                        if(!hasWonLevelBefore) {
+                            // update the boolean value from false to true
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean(key, true);
+                            editor.apply();
+                            // display first win message
+                            //!!!! wrong message shows up because sharedPref already updated in increment progress method
+                            // need to fix this bug
+                            displayFirstWinMessage();
+                        } else {
+                            displayWinMessage();
+                        }
+                        //displayWinMessage();
                     } else if(moveCounter == 0) {
                         gameOver = true;
                         timerRunning = false;
@@ -302,6 +336,35 @@ public class GameplayActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    // exclusive message that shows the first time a player wins a level. Player will be notified that a reward
+    // has been unlocked and can be viewed in the gallery page
+    private void displayFirstWinMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Congratulation, you have matched all pairs! You have unlocked a reward! Go to gallery to view reward.")
+                .setTitle("You Win!");
+        builder.setCancelable(false)
+                .setNegativeButton("Go to Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // open rewards activity page
+                        Intent intent = new Intent(GameplayActivity.this, RewardActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+        builder.setPositiveButton("New game", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // start a new activity (new game)
+                progressBar.setProgress(0);
+                gameOver = false;
+                setMoveCounterLevel();
+                recreate();
+            }
+        });
+        builder.show();
     }
 
     // Message dialog when players have exhausted all moves
@@ -378,11 +441,35 @@ public class GameplayActivity extends AppCompatActivity {
         }
         progressBar.setProgress(newProgress);
 
+        //********************************* (Moved logic outside)
         // if progress bar is full, game is over.  Now display You Win alert dialog
-        if(progressBar.getProgress() == progressBar.getMax()) {
-            countDownTimer.cancel();
-            displayWinMessage();
-        }
+//        if(progressBar.getProgress() == progressBar.getMax()) {
+//            // stop timer when match all pairs
+//            countDownTimer.cancel();
+//            //***************************************************
+//            // save the level that the user beat
+//            saveLevelBeat();
+//
+//            // check if player has won current level before
+//            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+//            String key = "hasWon" + level;
+//            boolean hasWonLevelBefore = sharedPreferences.getBoolean(key, false);
+//
+//            // if the player hasn't won the level before
+//            if(!hasWonLevelBefore) {
+//                // update the boolean value from false to true
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putBoolean(key, true);
+//                editor.apply();
+//                // display first win message. This message will tell users that they unlocked a reward
+//                // and that they can check the reward in the gallery page
+//                displayFirstWinMessage();
+//            } else {
+//                // if the user has already completed the level, it will show the default win message
+//                displayWinMessage();
+//            }
+//            //displayWinMessage();
+//        }
 
     }
 
@@ -416,6 +503,8 @@ public class GameplayActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             // might be redundant
                             //timerRunning = false;
+                            // forgot to reset progress bar
+                            progressBar.setProgress(0);
                             setMoveCounterLevel();
                             recreate();
                         }
@@ -507,6 +596,37 @@ public class GameplayActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    // This method saves the level that the user beat in shared preferences to be used by gallery
+    public void saveLevelBeat(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String stringLevel;
+        switch (level) {
+            case 1: level = 1;
+                    stringLevel = "1";
+                    break;
+            case 2: level = 2;
+                    stringLevel = "2";
+                    break;
+            case 3: level = 3;
+                    stringLevel = "3";
+                    break;
+            case 4: level = 4;
+                    stringLevel = "4";
+                    break;
+            case 5: level = 5;
+                    stringLevel = "5";
+                    break;
+            case 6: level = 6;
+                    stringLevel = "6";
+                    break;
+            default: stringLevel = "1";
+                     break;
+        }
+        editor.putBoolean(stringLevel, true);
+        editor.apply();
     }
 }
 
