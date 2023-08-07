@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private float screenHeight;
 
     private Button startButton;
+
+    private Button galleryButton;
+
     private TextView levelText;
     private int level;
 
@@ -98,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
         //initialize the button to start game
         startButton = new Button(this);
         startButton.setText("Play");
+
+
+        //initialize the gallery button
+        galleryButton = new Button(this);
+        galleryButton.setText("Gallery");
 
 
 
@@ -177,6 +185,16 @@ public class MainActivity extends AppCompatActivity {
         set.clone(CL);
         set.connect(startButton.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
 
+        //The following codes are just to add the gallery button to the layout. When created the button's
+        // coordinate (the left upper corne of the button)  is at (0,0)
+        set = new ConstraintSet();
+        galleryButton.setId(View.generateViewId());  // cannot set id after add
+        CL.addView(galleryButton,0);
+        set.clone(CL);
+        set.connect(galleryButton.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
+
+
+
 
 
         //The following codes are just to add the level textview to the layout. When created the textview's
@@ -237,6 +255,29 @@ public class MainActivity extends AppCompatActivity {
         Log.i("heyhey",String.valueOf(Math.round(calculateLevelViewHeight(screenWidth, screenHeight))));
         levelText.setTextSize(screenWidth / 28);
         levelText.setGravity(Gravity.CENTER);
+
+
+        //The following code is to resize and place the gallery button at the upper right corner
+        galleryButton.setWidth(Math.round(calculateGalleryButtonWidth(screenWidth, screenHeight)));
+        galleryButton.setHeight(Math.round(calculateGalleryButtonHeight(screenWidth, screenHeight)));
+        galleryButton.setX(calculateGalleryButtonX(screenWidth,screenHeight));
+        galleryButton.setY(calculateGalleryButtonY(screenWidth,screenHeight));
+        galleryButton.setTextSize(screenWidth / 60);
+
+
+
+        galleryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                //playA();
+                Intent intent = new Intent(MainActivity.this, RewardActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
 
 
 
@@ -390,6 +431,38 @@ public class MainActivity extends AppCompatActivity {
         float buttonY = wheelSize + ((height - wheelSize) / 2) * (1 + (1/4));
         return buttonY;
     }
+
+
+
+    //Calculate the height of the gallery button, so that it will be of good size and never go off screen
+    private static float calculateGalleryButtonHeight(float width, float height) {
+        float wheelSize = Math.min(width, height);
+        float buttonHeight = (height - wheelSize) / 6;
+        return buttonHeight;
+    }
+
+    //Calculate the width of the gallery button, so that it will be of good size and never go off screen
+    private static float calculateGalleryButtonWidth(float width, float height) {
+        float wheelSize = Math.min(width, height);
+        float buttonWidth = width / 3;
+        return buttonWidth;
+    }
+
+
+    //Calculate the x coordinate of the gallery button, so that it will never go off screen
+    private static float calculateGalleryButtonX(float width, float height) {
+        float buttonX = width - (width / 3) - (width / 24) ;
+        return buttonX;
+    }
+
+    //Calculate the y coordinate of the button, so that it will never go off screen
+    private static float calculateGalleryButtonY(float width, float height) {
+        float wheelSize = Math.min(width, height);
+        float buttonY = ((height - wheelSize) / 2) * (1 / 8);
+        return buttonY;
+    }
+
+
 
 
 
