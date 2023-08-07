@@ -94,10 +94,6 @@ public class MainActivity extends AppCompatActivity {
         totalRotation = 0;
 
 
-        // initialize gallery button
-        Button galleryButton = findViewById(R.id.Gallery);
-
-
 
         //initialize the button to start game
         startButton = new Button(this);
@@ -252,14 +248,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, GameplayActivity.class);
                 //**************** new: passing level to gameplay activity
                 intent.putExtra("levelKey", level);
-                startActivity(intent);
-            }
-        });
-
-
-        galleryButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RewardActivity.class);
                 startActivity(intent);
             }
         });
