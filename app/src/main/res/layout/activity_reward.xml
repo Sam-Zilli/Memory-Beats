@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_2"
     tools:context=".RewardActivity">
 
     <ImageButton
@@ -81,15 +82,16 @@
 
     <Button
         android:id="@+id/button"
-        android:padding="0dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="342dp"
+        android:onClick="returnToMainMenu"
+        android:padding="0dp"
+        android:scaleType="centerCrop"
         android:text="Go To Home Page"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton

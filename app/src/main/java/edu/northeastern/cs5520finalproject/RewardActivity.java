@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.media.Image;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +37,11 @@ public class RewardActivity extends AppCompatActivity {
         Intent intent = new Intent(RewardActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void returnToMainMenu(View view) {
+        Intent intent = new Intent(RewardActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void loadImages() {
