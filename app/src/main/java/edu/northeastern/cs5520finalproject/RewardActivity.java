@@ -42,6 +42,7 @@ public class RewardActivity extends AppCompatActivity {
     public void returnToMainMenu(View view) {
         Intent intent = new Intent(RewardActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void loadImages() {
