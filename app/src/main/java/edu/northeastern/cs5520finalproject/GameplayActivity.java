@@ -18,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -210,6 +209,8 @@ public class GameplayActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    // Couldn't figure out how to override performClick
     protected void setupButtons() {
         // retrieving the buttons from the view
         button1 = findViewById(R.id.button1);
@@ -286,7 +287,7 @@ public class GameplayActivity extends AppCompatActivity {
                     // Bug where you still lose if you successfully match all pairs with zero moves left - fixed
                     // Check if players have exhausted all moves.  If move counter equal 0, the game is over
                     // Two scenarios:
-                    // 1. Match all pairs with exactly 0 moves remaining --> win
+                    // 1. Match all pairs with exactly 0 moves remaining --> win or match all pairs with moves remaining
                     // 2. No moves left --> lose
                     if(moveCounter == 0 && gameOver || progressBar.getProgress() == progressBar.getMax()) {
                         saveLevelBeat();
@@ -393,6 +394,7 @@ public class GameplayActivity extends AppCompatActivity {
 
 
     // Method to check if two frequency pairs match
+    @SuppressLint("ClickableViewAccessibility")
     private boolean checkMatch() {
         if(previousClick.getFrequencyA() == currentClick.getFrequencyA() && previousClick.getFrequencyB() == currentClick.getFrequencyB()) {
             // If buttons match, make both buttons invisible
@@ -440,37 +442,6 @@ public class GameplayActivity extends AppCompatActivity {
             newProgress = progressBar.getMax();
         }
         progressBar.setProgress(newProgress);
-
-        //********************************* (Moved logic outside)
-        // if progress bar is full, game is over.  Now display You Win alert dialog
-//        if(progressBar.getProgress() == progressBar.getMax()) {
-//            // stop timer when match all pairs
-//            countDownTimer.cancel();
-//            //***************************************************
-//            // save the level that the user beat
-//            saveLevelBeat();
-//
-//            // check if player has won current level before
-//            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-//            String key = "hasWon" + level;
-//            boolean hasWonLevelBefore = sharedPreferences.getBoolean(key, false);
-//
-//            // if the player hasn't won the level before
-//            if(!hasWonLevelBefore) {
-//                // update the boolean value from false to true
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.putBoolean(key, true);
-//                editor.apply();
-//                // display first win message. This message will tell users that they unlocked a reward
-//                // and that they can check the reward in the gallery page
-//                displayFirstWinMessage();
-//            } else {
-//                // if the user has already completed the level, it will show the default win message
-//                displayWinMessage();
-//            }
-//            //displayWinMessage();
-//        }
-
     }
 
     // https://developer.android.com/reference/android/os/CountDownTimer
