@@ -279,9 +279,12 @@ public class GameplayActivity extends AppCompatActivity {
                             resetButton = true;
 
                             // decrement move counter and display updated count
-                            moveCounter--;
-                            String current = "Moves Left: " + moveCounter;
-                            moveText.setText(current);
+                            // Decrement move counter and update text
+                            if(moveCounter > 0) {
+                                moveCounter--;
+                                String current = "Moves Left: " + moveCounter;
+                                moveText.setText(current);
+                            }
                         }
                     }
                     // Bug where you still lose if you successfully match all pairs with zero moves left - fixed
@@ -289,7 +292,7 @@ public class GameplayActivity extends AppCompatActivity {
                     // Two scenarios:
                     // 1. Match all pairs with exactly 0 moves remaining --> win or match all pairs with moves remaining
                     // 2. No moves left --> lose
-                    if(moveCounter == 0 && gameOver || progressBar.getProgress() == progressBar.getMax()) {
+                    if(moveCounter <= 0 && gameOver || progressBar.getProgress() == progressBar.getMax()) {
                         saveLevelBeat();
                         countDownTimer.cancel();
 
@@ -313,7 +316,7 @@ public class GameplayActivity extends AppCompatActivity {
                         }
                         //displayWinMessage();
                     } else if(moveCounter == 0) {
-                        gameOver = true;
+//                        gameOver = true;
                         timerRunning = false;
                         countDownTimer.cancel();
                         displayNoMovesLeftMessage();
@@ -419,9 +422,11 @@ public class GameplayActivity extends AppCompatActivity {
             incrementProgress(10);
 
             // Decrement move counter and update text
-            moveCounter--;
-            String current = "Moves Left: " + moveCounter;
-            moveText.setText(current);
+            if(moveCounter > 0) {
+                moveCounter--;
+                String current = "Moves Left: " + moveCounter;
+                moveText.setText(current);
+            }
             return true;
         }
         return false;
