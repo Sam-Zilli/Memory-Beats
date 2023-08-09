@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Insets;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,8 +38,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static Bitmap imageOriginal, imageScaled;
     private static Matrix matrix;
+
+    private static Matrix logoMatrix;
     private ImageView wheel;
     private ImageView wheelBackground;
+
+    private ImageView logo;
+
+
     private int wheelHeight, wheelWidth;
     private double left;
     private double top;
@@ -85,13 +92,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // ******************
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //Drawable logoDrawable = getDrawable(R.drawable.logo);
         Drawable d = getDrawable(R.drawable.rybcolorwheel1536x1536withhole);
         Drawable dbackground = getDrawable(R.drawable.rybcolorwheel1536x1536mutednumbercontrast);
+
         wheel = new ImageView(this);
         wheelBackground= new ImageView(this);
         wheel.setImageDrawable(d);
         wheelBackground.setImageDrawable(dbackground);
+
+        /**
+        logo = new ImageView(this);
+        logo.setImageDrawable(logoDrawable);
+         **/
+
         setContentView(R.layout.activity_main);
+
+
 
 
         totalRotation = 0;
@@ -160,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         //The following codes are just to add the wheel and the wheel background to the layout. When created the wheel's
         // coordinate (the left upper corne of the button)  is at (0,0)
         ConstraintLayout CL = findViewById(R.id.constraintLayout);
@@ -206,6 +222,20 @@ public class MainActivity extends AppCompatActivity {
         set.connect(levelText.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
 
 
+        /**
+        //The following codes are just to add the logo to the layout. When created the logo's
+        // coordinate (the left upper corner of the button)  is at (0,0)
+        set = new ConstraintSet();
+        logo.setId(View.generateViewId());  // cannot set id after add
+        CL.addView(logo,0);
+        set.clone(CL);
+        set.connect(logo.getId(), ConstraintSet.TOP, CL.getId(), ConstraintSet.TOP, 0);
+        set.applyTo(CL); // apply to layout
+         **/
+
+
+
+
 
 
 
@@ -240,6 +270,8 @@ public class MainActivity extends AppCompatActivity {
         wheel.setOnTouchListener(new WheelOnTouchListener(wheel, matrix));
 
 
+
+
         //The following code is to resize and place the button at the right place
         startButton.setWidth(Math.round(calculateButtonWidth(screenWidth, screenHeight)));
         startButton.setHeight(Math.round(calculateButtonHeight(screenWidth, screenHeight)));
@@ -255,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i("heyhey",String.valueOf(Math.round(calculateLevelViewHeight(screenWidth, screenHeight))));
         levelText.setTextSize(screenWidth / 28);
         levelText.setGravity(Gravity.CENTER);
+        levelText.setTypeface(levelText.getTypeface(), Typeface.BOLD);
 
 
         //The following code is to resize and place the gallery button at the upper right corner
@@ -263,6 +296,16 @@ public class MainActivity extends AppCompatActivity {
         galleryButton.setX(calculateGalleryButtonX(screenWidth,screenHeight));
         galleryButton.setY(calculateGalleryButtonY(screenWidth,screenHeight));
         galleryButton.setTextSize(screenWidth / 60);
+
+
+        /**
+        //The following code is to resize and place the logo at the right place
+        logo.setScaleType(ImageView.ScaleType.MATRIX);
+        logoMatrix = setLogoLocation(screenWidth, screenHeight, logoDrawable);
+        logo.setImageMatrix(logoMatrix);
+         **/
+
+
 
 
 
@@ -400,6 +443,22 @@ public class MainActivity extends AppCompatActivity {
         m.postScale(scale, scale);
         m.postTranslate((width - drawableWidth * scale) / 2F,
                 (height - drawableHeight * scale) / 2F);
+        return m;
+    }
+
+
+
+    //This function returns the transformation matrix that can set the logo image to the center of the width of the screen above the wheel and also scale the image to fit the screen
+    private static Matrix setLogoLocation(float width, float height, Drawable d) {
+        final float drawableWidth = d.getIntrinsicWidth();
+        final float drawableHeight = d.getIntrinsicHeight();
+        final float widthScale = width / drawableWidth;
+        //final float heightScale = height / drawableHeight;
+        final float scale = Math.min(1.0f, widthScale);
+        Matrix m = new Matrix();
+        m.postScale(scale, scale);
+        m.postTranslate((width - drawableWidth * scale) / 2F,
+                height / 8f) ;
         return m;
     }
 
