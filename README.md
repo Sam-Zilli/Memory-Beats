@@ -1,6 +1,6 @@
 # Welcome to Memory Beats! #
 
-Android Application by Sam Zilli, Aaron Leung and Wang Xie
+Android Application by Sam Zilli, Aaron Leung, and Wang Xie
 
 
 Demo Video: 
