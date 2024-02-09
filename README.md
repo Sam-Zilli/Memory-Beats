@@ -11,5 +11,3 @@ https://drive.google.com/file/d/1J2elLblTP1_dgHQ5Y5vDhZsJCdQQBO1B/view?usp=shari
 
 How to make C/C++ and Java Mingle: https://www.youtube.com/watch?v=Av40FvqX_zE
 
-Presentation: 
-https://drive.google.com/file/d/123drUnqXkIOJFVaeULH6IvdDL59_oRPp/view?usp=drive_link
